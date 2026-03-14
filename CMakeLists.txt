@@ -10,7 +10,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 include_directories(include)
 
 # SERVER
-add_executable(DoomServer 
+add_executable(DoomManServer 
     src/GameServer.cpp 
     src/server/MapLoader.cpp
     src/server/GameEngine.cpp
@@ -20,10 +20,10 @@ add_executable(DoomServer
     include/common/Types.h
     include/common/Serialization.h
 )
-target_link_libraries(DoomServer PRIVATE Qt6::Network Qt6::Core)
+target_link_libraries(DoomManServer PRIVATE Qt6::Network Qt6::Core)
 
 # CLIENT
-add_executable(DoomClient
+add_executable(DoomManClient
     src/GameClient.cpp
     src/client/NetworkManager.cpp
     src/client/GameWidget.cpp
@@ -32,6 +32,6 @@ add_executable(DoomClient
     include/common/Types.h
     include/common/Serialization.h
 )
-target_link_libraries(DoomClient PRIVATE Qt6::Widgets Qt6::Network)
+target_link_libraries(DoomManClient PRIVATE Qt6::Widgets Qt6::Network)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

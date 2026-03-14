@@ -84,4 +84,17 @@ inline QDataStream& operator>>(QDataStream& in, GameState& g) {
     in >> g.timeLeftSeconds;
     return in;
 }
+
+// PlayerInput
+inline QDataStream& operator<<(QDataStream& out, const PlayerInput& input) {
+    return out << static_cast<uint8_t>(input);
+}
+
+inline QDataStream& operator>>(QDataStream& in, PlayerInput& input) {
+    uint8_t val;
+    in >> val;
+    input = static_cast<PlayerInput>(val);
+    return in;
+}
+
 }  // namespace Doom

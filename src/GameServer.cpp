@@ -14,11 +14,18 @@ int main(int argc, char* argv[]) {
 
     Doom::GameState game = *loadedState;
 
+    if (!game.players.empty()) {
+        game.players[0].id = 0;
+    }
+
     Doom::GameEngine engine(game);
-    Doom::NetworkManager network(666);  // Listening on port 666 :)
+    Doom::NetworkManager network(666);  // Listening on port 666 >:)
 
     QObject::connect(&engine, &Doom::GameEngine::gameStateUpdated,
                      [&]() { network.broadcastState(game); });
+
+    QObject::connect(&network, &Doom::NetworkManager::inputReceived, &engine,
+                     &Doom::GameEngine::processInput);
 
     // 4. Start the simulation
     engine.start();

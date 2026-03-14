@@ -23,19 +23,20 @@ NetworkManager::~NetworkManager() = default;
 void NetworkManager::onNewConnection() {
     while (m_server->hasPendingConnections()) {
         QTcpSocket* client = m_server->nextPendingConnection();
-        m_clients.append(client);
+        uint32_t assignedId = m_nextPlayerId++;
+        m_clientToPlayerId[client] = assignedId;
 
         connect(client, &QTcpSocket::disconnected, this, &NetworkManager::onClientDisconnected);
         connect(client, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
 
-        qDebug() << "NetworkManager: Client connected from" << client->peerAddress().toString();
+        qDebug() << "NetworkManager: Client connected. Assigned ID:" << assignedId;
     }
 }
 
 void NetworkManager::onClientDisconnected() {
     auto* client = qobject_cast<QTcpSocket*>(sender());
     if (client) {
-        m_clients.removeAll(client);
+        m_clientToPlayerId.remove(client);
         client->deleteLater();
         qDebug() << "NetworkManager: Client disconnected";
     }
@@ -43,13 +44,20 @@ void NetworkManager::onClientDisconnected() {
 
 void NetworkManager::onReadyRead() {
     auto* client = qobject_cast<QTcpSocket*>(sender());
-    if (client) {
-        QByteArray data = client->readAll();
+    if (!client || !m_clientToPlayerId.contains(client)) return;
+
+    QDataStream in(client);
+    in.setVersion(QDataStream::Qt_6_0);
+
+    while (!in.atEnd()) {
+        PlayerInput input;
+        in >> input;
+        emit inputReceived(m_clientToPlayerId[client], input);
     }
 }
 
 void NetworkManager::broadcastState(const GameState& state) {
-    if (m_clients.isEmpty()) return;
+    if (m_clientToPlayerId.isEmpty()) return;
 
     QByteArray packet;
     QDataStream stream(&packet, QIODevice::WriteOnly);
@@ -57,7 +65,8 @@ void NetworkManager::broadcastState(const GameState& state) {
 
     stream << state;
 
-    for (QTcpSocket* client : m_clients) {
+    for (auto it = m_clientToPlayerId.keyBegin(); it != m_clientToPlayerId.keyEnd(); ++it) {
+        QTcpSocket* client = *it;
         if (client->state() == QAbstractSocket::ConnectedState) {
             client->write(packet);
         }

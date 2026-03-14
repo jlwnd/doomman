@@ -1,18 +1,17 @@
 #include "client/NetworkManager.h"
-#include "common/Serialization.h"
 
 #include <QDataStream>
+
+#include "common/Serialization.h"
 
 namespace Doom {
 
 ClientNetworkManager::ClientNetworkManager(QObject* parent)
     : QObject(parent), m_socket(new QTcpSocket(this)) {
-    
     connect(m_socket, &QTcpSocket::readyRead, this, &ClientNetworkManager::onReadyRead);
-    
-    connect(m_socket, &QTcpSocket::errorOccurred, [](QAbstractSocket::SocketError error) {
-        qCritical() << "Network Error:" << error;
-    });
+
+    connect(m_socket, &QTcpSocket::errorOccurred,
+            [](QAbstractSocket::SocketError error) { qCritical() << "Network Error:" << error; });
 }
 
 void ClientNetworkManager::connectToServer(const QString& host, quint16 port) {
@@ -26,14 +25,23 @@ void ClientNetworkManager::onReadyRead() {
     in.startTransaction();
 
     GameState newState;
-    
+
     in >> newState;
 
     if (in.commitTransaction()) {
         emit gameStateReceived(newState);
-    } else {
-        qDebug() << "Waiting for more data to complete GameState packet...";
     }
+}
+
+void ClientNetworkManager::sendInput(PlayerInput input) {
+    if (m_socket->state() != QAbstractSocket::ConnectedState) return;
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_0);
+
+    out << input;
+    m_socket->write(block);
 }
 
 }  // namespace Doom

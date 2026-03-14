@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QList>
+#include <QMap>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -18,6 +18,9 @@ class NetworkManager : public QObject {
    public slots:
     void broadcastState(const GameState& state);
 
+   signals:
+    void inputReceived(uint32_t playerId, PlayerInput input);
+
    private slots:
     void onNewConnection();
     void onClientDisconnected();
@@ -25,7 +28,8 @@ class NetworkManager : public QObject {
 
    private:
     QTcpServer* m_server;
-    QList<QTcpSocket*> m_clients;
+    QMap<QTcpSocket*, uint32_t> m_clientToPlayerId;
+    uint32_t m_nextPlayerId = 0;
 };
 
 }  // namespace Doom
