@@ -17,6 +17,8 @@ add_executable(DoomManServer
     src/server/NetworkManager.cpp
     include/server/GameEngine.h
     include/server/NetworkManager.h
+    include/server/Demon.h
+    include/server/demons/Imp.h
     include/common/Types.h
     include/common/Serialization.h
 )
