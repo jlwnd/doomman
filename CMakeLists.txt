@@ -22,6 +22,7 @@ add_executable(DoomServer
     include/server/MapLoader.h
     include/server/NetworkManager.h
     include/common/Types.h
+    include/common/Serialization.h
 )
 
 target_link_libraries(DoomServer PRIVATE 

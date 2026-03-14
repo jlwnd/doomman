@@ -3,6 +3,8 @@
 #include <QDataStream>
 #include <QDebug>
 
+#include "common/Serialization.h"
+
 namespace Doom {
 
 NetworkManager::NetworkManager(quint16 port, QObject* parent)
