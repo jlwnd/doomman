@@ -1,17 +1,22 @@
-#include "common/Types.h"
 #include <iostream>
 
+#include "common/Types.h"
+#include "server/MapLoader.h"
+
 int main() {
-    Doom::GameState game;
-    game.mode = Doom::GameMode::Lobby;
-    
-    std::cout << "Serwer DoomMan Running" << std::endl;
-    std::cout << "Board size: " << game.board.size() << "x" << game.board[0].size() << std::endl;
-    
-    Doom::Position p1{10, 10};
-    Doom::Position p2{10, 10};
-    if (p1 == p2) {
-        std::cout << "Position comparison is working!" << std::endl;
+    auto loadedState = Doom::MapLoader::loadMap("assets/levels/level1.txt");
+
+    if (!loadedState) {
+        std::cerr << "Map not imported properly" << std::endl;
+        return 1;
+    }
+
+    Doom::GameState game = *loadedState;
+    std::cout << "Map imported! Size: " << game.board.size() << "x" << game.board[0].size()
+              << std::endl;
+
+    if (game.board[0][0] == Doom::TileType::Wall) {
+        std::cout << "Found wall at (0,0)" << std::endl;
     }
 
     return 0;

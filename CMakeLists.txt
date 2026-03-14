@@ -12,5 +12,11 @@ set(CMAKE_AUTORCC ON)
 
 include_directories(include)
 
-add_executable(DoomTest src/main_server.cpp)
-target_link_libraries(DoomManTest PRIVATE Qt6::Widgets Qt6::Network)
+add_executable(DoomServer 
+    src/game_server.cpp 
+    src/server/map_loader.cpp
+)
+
+target_link_libraries(DoomServer PRIVATE Qt6::Widgets Qt6::Network)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

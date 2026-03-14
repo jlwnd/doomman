@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstdint>
 #include <array>
-#include <vector>
-#include <string>
 #include <compare>
+#include <cstdint>
+#include <string>
+#include <vector>
 
 namespace Doom {
 
@@ -12,27 +12,11 @@ inline constexpr int BOARD_SIZE = 21;
 inline constexpr int MAX_PLAYERS = 4;
 inline constexpr int DEMON_COUNT = 4;
 
-enum class TileType : uint8_t {
-    Empty,
-    Wall,
-    Corridor,
-    Berserk,
-    SpawnPoint
-};
+enum class TileType : uint8_t { Empty, Wall, Corridor, Berserk, SpawnPoint };
 
-enum class DemonType : uint8_t {
-    Imp, 
-    Pinky,
-    Cacodemon,
-    LostSoul
-};
+enum class DemonType : uint8_t { Imp, Pinky, Cacodemon, LostSoul };
 
-enum class GameMode : uint8_t {
-    Lobby,
-    InGame,
-    Summary
-};
-
+enum class GameMode : uint8_t { Lobby, InGame, Summary };
 
 struct Position {
     int x = 0;
@@ -52,19 +36,19 @@ struct PlayerState {
 struct DemonState {
     DemonType type;
     Position pos;
-    bool isFrightened = false; 
+    bool isFrightened = false;
 };
 
 struct GameState {
     GameMode mode = GameMode::Lobby;
-    
+
     std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE> board;
 
     std::vector<PlayerState> players;
 
     std::array<DemonState, DEMON_COUNT> demons;
 
-    int32_t timeLeftSeconds = 180; 
+    int32_t timeLeftSeconds = 180;
 };
 
-}
+}  // namespace Doom
