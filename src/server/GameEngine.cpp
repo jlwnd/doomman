@@ -17,22 +17,40 @@ void GameEngine::start() {
 }
 
 void GameEngine::tick() {
-    // 1. Update game clock using real-time measurement
     qint64 msPassed = m_gameClock.elapsed();
     int secondsPassed = static_cast<int>(msPassed / 1000);
     m_state.timeLeftSeconds = std::max(0, m_initialTime - secondsPassed);
 
-    // 2. Process world logic
     updateDemons();
 
-    // 3. Notify network system that state is ready to be broadcasted
     emit gameStateUpdated();
 }
 
-void GameEngine::processInput(uint32_t playerId, int dx, int dy) {
+void GameEngine::processInput(uint32_t playerId, PlayerInput input) {
+    int dx = 0;
+    int dy = 0;
+
+    switch (input) {
+        case PlayerInput::MoveUp:
+            dy = -1;
+            break;
+        case PlayerInput::MoveDown:
+            dy = 1;
+            break;
+        case PlayerInput::MoveLeft:
+            dx = -1;
+            break;
+        case PlayerInput::MoveRight:
+            dx = 1;
+            break;
+        default:
+            return;
+    }
+
     for (auto& player : m_state.players) {
         if (player.id == playerId && player.isAlive) {
             movePlayer(player, dx, dy);
+            break;
         }
     }
 }
@@ -41,7 +59,6 @@ void GameEngine::movePlayer(PlayerState& player, int dx, int dy) {
     int newX = player.pos.x + dx;
     int newY = player.pos.y + dy;
 
-    // Basic bounds and collision check
     if (newX >= 0 && newX < BOARD_SIZE && newY >= 0 && newY < BOARD_SIZE) {
         if (m_state.board[newY][newX] != TileType::Wall) {
             player.pos.x = newX;

@@ -1,7 +1,7 @@
+#include "server/MapLoader.h"
+
 #include <fstream>
 #include <iostream>
-
-#include "server/MapLoader.h"
 
 namespace Doom {
 

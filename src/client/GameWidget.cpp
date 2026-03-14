@@ -1,11 +1,13 @@
 #include "client/GameWidget.h"
-#include <QPainter>
+
 #include <QPaintEvent>
+#include <QPainter>
 
 namespace Doom {
 
 GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
     setAttribute(Qt::WA_OpaquePaintEvent);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void GameWidget::updateState(const GameState& state) {
@@ -19,27 +21,54 @@ void GameWidget::paintEvent(QPaintEvent* event) {
     for (int y = 0; y < BOARD_SIZE; ++y) {
         for (int x = 0; x < BOARD_SIZE; ++x) {
             QRect rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            
+
             switch (m_currentState.board[y][x]) {
                 case TileType::Wall:
-                    painter.fillRect(rect, Qt::black); break;
+                    painter.fillRect(rect, Qt::black);
+                    break;
                 case TileType::Corridor:
-                    painter.fillRect(rect, Qt::darkGray); break;
+                    painter.fillRect(rect, Qt::darkGray);
+                    break;
                 case TileType::Berserk:
-                    painter.fillRect(rect, Qt::blue); break;
+                    painter.fillRect(rect, Qt::blue);
+                    break;
                 case TileType::SpawnPoint:
-                    painter.fillRect(rect, Qt::red); break;
+                    painter.fillRect(rect, Qt::red);
+                    break;
                 default:
-                    painter.fillRect(rect, Qt::white); break;
+                    painter.fillRect(rect, Qt::white);
+                    break;
             }
         }
     }
 
     for (const auto& player : m_currentState.players) {
         painter.setBrush(Qt::green);
-        painter.drawEllipse(player.pos.x * TILE_SIZE, player.pos.y * TILE_SIZE, 
-                            TILE_SIZE, TILE_SIZE);
+        painter.drawEllipse(player.pos.x * TILE_SIZE, player.pos.y * TILE_SIZE, TILE_SIZE,
+                            TILE_SIZE);
     }
 }
 
-} // namespace Doom
+void GameWidget::keyPressEvent(QKeyEvent* event) {
+    PlayerInput input = PlayerInput::None;
+    switch (event->key()) {
+        case Qt::Key_W:
+            input = PlayerInput::MoveUp;
+            break;
+        case Qt::Key_S:
+            input = PlayerInput::MoveDown;
+            break;
+        case Qt::Key_A:
+            input = PlayerInput::MoveLeft;
+            break;
+        case Qt::Key_D:
+            input = PlayerInput::MoveRight;
+            break;
+    }
+
+    if (input != PlayerInput::None) {
+        emit inputDetected(input);
+    }
+}
+
+}  // namespace Doom

@@ -10,6 +10,7 @@ class ClientNetworkManager : public QObject {
    public:
     explicit ClientNetworkManager(QObject* parent = nullptr);
     void connectToServer(const QString& host, quint16 port);
+    void sendInput(PlayerInput input);
 
    signals:
     void gameStateReceived(const GameState& state);

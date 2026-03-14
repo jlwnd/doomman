@@ -14,7 +14,9 @@ class GameEngine : public QObject {
     explicit GameEngine(GameState& state, QObject* parent = nullptr);
 
     void start();
-    void processInput(uint32_t playerId, int dx, int dy);
+
+   public slots:
+    void processInput(uint32_t playerId, PlayerInput input);
 
    signals:
     void gameStateUpdated();

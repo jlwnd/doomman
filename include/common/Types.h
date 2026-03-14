@@ -51,4 +51,6 @@ struct GameState {
     int32_t timeLeftSeconds = 180;
 };
 
+enum class PlayerInput : uint8_t { MoveUp, MoveDown, MoveLeft, MoveRight, None };
+
 }  // namespace Doom
