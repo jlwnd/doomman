@@ -53,6 +53,8 @@ void NetworkManager::broadcastState(const GameState& state) {
     QDataStream stream(&packet, QIODevice::WriteOnly);
     stream.setVersion(QDataStream::Qt_6_0);
 
+    stream << state;
+
     for (QTcpSocket* client : m_clients) {
         if (client->state() == QAbstractSocket::ConnectedState) {
             client->write(packet);
