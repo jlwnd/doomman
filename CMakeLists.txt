@@ -13,8 +13,8 @@ set(CMAKE_AUTORCC ON)
 include_directories(include)
 
 add_executable(DoomServer 
-    src/game_server.cpp 
-    src/server/map_loader.cpp
+    src/GameServer.cpp 
+    src/server/MapLoader.cpp
 )
 
 target_link_libraries(DoomServer PRIVATE Qt6::Widgets Qt6::Network)
