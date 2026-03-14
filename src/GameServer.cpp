@@ -1,23 +1,29 @@
-#include <iostream>
+#include <QCoreApplication>
+#include <QDebug>
 
 #include "common/Types.h"
+#include "server/GameEngine.h"
 #include "server/MapLoader.h"
+#include "server/NetworkManager.h"
 
-int main() {
+int main(int argc, char* argv[]) {
+    QCoreApplication a(argc, argv);
+
     auto loadedState = Doom::MapLoader::loadMap("assets/levels/level1.txt");
-
-    if (!loadedState) {
-        std::cerr << "Map not imported properly" << std::endl;
-        return 1;
-    }
+    if (!loadedState) return 1;
 
     Doom::GameState game = *loadedState;
-    std::cout << "Map imported! Size: " << game.board.size() << "x" << game.board[0].size()
-              << std::endl;
 
-    if (game.board[0][0] == Doom::TileType::Wall) {
-        std::cout << "Found wall at (0,0)" << std::endl;
-    }
+    Doom::GameEngine engine(game);
+    Doom::NetworkManager network(666);  // Listening on port 666 :)
 
-    return 0;
+    QObject::connect(&engine, &Doom::GameEngine::gameStateUpdated,
+                     [&]() { network.broadcastState(game); });
+
+    // 4. Start the simulation
+    engine.start();
+
+    qDebug() << "Server is running. Logic and Network are linked.";
+
+    return a.exec();
 }
