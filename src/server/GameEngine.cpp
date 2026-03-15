@@ -3,10 +3,14 @@
 #include <QDebug>
 #include <algorithm>
 
+#include "server/demons/Imp.h"
+
 namespace Doom {
 
 GameEngine::GameEngine(GameState& state, QObject* parent)
     : QObject(parent), m_state(state), m_initialTime(state.timeLeftSeconds) {
+    initDemons();
+
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &GameEngine::tick);
 }
@@ -80,8 +84,64 @@ void GameEngine::checkCollisions(PlayerState& player) {
     }
 }
 
+void GameEngine::initDemons() {
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            if (m_state.board[y][x] == TileType::SpawnPoint) {
+                m_spawnPoints.push_back({x, y});
+            }
+        }
+    }
+
+    if (m_spawnPoints.empty()) {
+        qWarning() << "[GameEngine]: No spawn points found on the map!";
+        return;
+    }
+
+    for (int i = 0; i < DEMON_COUNT; i++) {
+        Position spawnPos = m_spawnPoints[i % m_spawnPoints.size()];
+
+        m_demonAI.push_back(std::make_unique<Imp>(DemonType::Imp, spawnPos));
+    }
+
+    for (size_t i = 0; i < m_demonAI.size() && i < DEMON_COUNT; i++) {
+        m_state.demons[i].type = m_demonAI[i]->getType();
+        m_state.demons[i].pos = m_demonAI[i]->getPosition();
+        m_state.demons[i].isFrightened = m_demonAI[i]->isFrightened();
+    }
+}
+
 void GameEngine::updateDemons() {
-    // AI logic will be implemented here
+    PlayerState* target = nullptr;
+    for (auto& p : m_state.players) {
+        if (p.isAlive) {
+            target = &p;
+            break;
+        }
+    }
+
+    if (!target) return;
+
+    for (size_t i = 0; i < m_demonAI.size(); ++i) {
+        m_demonAI[i]->move(TICK_RATE_MS, m_state, *target);
+
+        m_state.demons[i].pos = m_demonAI[i]->getPosition();
+        m_state.demons[i].isFrightened = m_demonAI[i]->isFrightened();
+
+        if (m_state.demons[i].pos == target->pos) {
+            if (m_state.demons[i].isFrightened) {
+                target->score += 200;
+
+                Position respawn = m_spawnPoints[rand() % m_spawnPoints.size()];
+
+                m_demonAI[i] = std::make_unique<Imp>(DemonType::Imp, respawn);
+
+            } else {
+                target->isAlive = false;
+                qDebug() << "[GameEngine]: Slayer has been eliminated by a demon!";
+            }
+        }
+    }
 }
 
 }  // namespace Doom

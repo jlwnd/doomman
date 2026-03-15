@@ -3,7 +3,15 @@
 #include "server/Navigation.h"
 
 namespace Doom {
-void Imp::move(const GameState& state, const PlayerState& target) {
+void Imp::move(int deltaMs, const GameState& state, const PlayerState& target) {
+    m_timeAccumulator += deltaMs;
+    int currentInterval = m_frightened ? m_moveIntervalMs * 2 : m_moveIntervalMs;
+    if (m_timeAccumulator < currentInterval) {
+        return;
+    }
+
+    m_timeAccumulator = 0;
+
     PlayerInput step = Navigation::getNextMoveAStar(m_pos, target.pos, state.board);
 
     int dx = 0;

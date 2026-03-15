@@ -3,8 +3,9 @@
 
 namespace Doom {
 class Imp : public Demon {
-    using Demon::Demon;
+   public:
+    explicit Imp(DemonType type, Position startPos) : Demon(type, startPos, 400) {}
 
-    void move(const GameState& state, const PlayerState& target) override;
+    void move(int deltaMs, const GameState& state, const PlayerState& target) override;
 };
 }  // namespace Doom

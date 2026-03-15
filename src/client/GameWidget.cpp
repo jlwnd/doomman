@@ -18,6 +18,7 @@ void GameWidget::updateState(const GameState& state) {
 void GameWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
 
+    // Painting Map
     for (int y = 0; y < BOARD_SIZE; ++y) {
         for (int x = 0; x < BOARD_SIZE; ++x) {
             QRect rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -42,13 +43,44 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         }
     }
 
+    // Painting Players
     for (const auto& player : m_currentState.players) {
         painter.setBrush(Qt::green);
         painter.drawEllipse(player.pos.x * TILE_SIZE, player.pos.y * TILE_SIZE, TILE_SIZE,
                             TILE_SIZE);
     }
-}
 
+    // Painting Demons
+    for (const auto& demon : m_currentState.demons) {
+        if (demon.isFrightened) {
+            painter.setBrush(Qt::cyan);
+        } else {
+            painter.setBrush(Qt::darkRed);
+        }
+
+        painter.drawEllipse(demon.pos.x * TILE_SIZE, demon.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+        painter.setPen(Qt::white);
+        QString label = "";
+        switch (demon.type) {
+            case DemonType::Imp:
+                label = "I";
+                break;
+            case DemonType::Pinky:
+                label = "P";
+                break;
+            case DemonType::Cacodemon:
+                label = "C";
+                break;
+            case DemonType::LostSoul:
+                label = "L";
+                break;
+        }
+        painter.drawText(demon.pos.x * TILE_SIZE, demon.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                         Qt::AlignCenter, label);
+        painter.setPen(Qt::black);
+    }
+}
 void GameWidget::keyPressEvent(QKeyEvent* event) {
     PlayerInput input = PlayerInput::None;
     switch (event->key()) {
