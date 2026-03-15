@@ -15,9 +15,11 @@ add_executable(DoomManServer
     src/server/MapLoader.cpp
     src/server/GameEngine.cpp
     src/server/NetworkManager.cpp
+    src/server/Navigation.cpp
     include/server/GameEngine.h
     include/server/NetworkManager.h
     include/server/Demon.h
+    include/server/Navigation.h
     include/server/demons/Imp.h
     include/common/Types.h
     include/common/Serialization.h
