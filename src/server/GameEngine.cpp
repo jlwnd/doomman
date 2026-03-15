@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "server/demons/Imp.h"
+#include "server/demons/Pinky.h"
 
 namespace Doom {
 
@@ -53,6 +54,7 @@ void GameEngine::processInput(uint32_t playerId, PlayerInput input) {
 
     for (auto& player : m_state.players) {
         if (player.id == playerId && player.isAlive) {
+            player.lastInput = input == PlayerInput::None ? player.lastInput : input;
             movePlayer(player, dx, dy);
             break;
         }
@@ -98,11 +100,9 @@ void GameEngine::initDemons() {
         return;
     }
 
-    for (int i = 0; i < DEMON_COUNT; i++) {
-        Position spawnPos = m_spawnPoints[i % m_spawnPoints.size()];
-
-        m_demonAI.push_back(std::make_unique<Imp>(DemonType::Imp, spawnPos));
-    }
+    // @TODO - change spawning mechanics
+    m_demonAI.push_back(std::make_unique<Imp>(DemonType::Imp, m_spawnPoints[0]));
+    m_demonAI.push_back(std::make_unique<Pinky>(DemonType::Pinky, m_spawnPoints[1]));
 
     for (size_t i = 0; i < m_demonAI.size() && i < DEMON_COUNT; i++) {
         m_state.demons[i].type = m_demonAI[i]->getType();

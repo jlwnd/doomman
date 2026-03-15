@@ -18,6 +18,8 @@ enum class DemonType : uint8_t { Imp, Pinky, Cacodemon, LostSoul };
 
 enum class GameMode : uint8_t { Lobby, InGame, Summary };
 
+enum class PlayerInput : uint8_t { MoveUp, MoveDown, MoveLeft, MoveRight, None };
+
 struct Position {
     int x = 0;
     int y = 0;
@@ -28,6 +30,7 @@ struct Position {
 struct PlayerState {
     uint32_t id = 0;
     Position pos;
+    PlayerInput lastInput = PlayerInput::None;
     uint32_t score = 0;
     bool isAlive = true;
     bool hasBerserk = false;
@@ -50,7 +53,5 @@ struct GameState {
 
     int32_t timeLeftSeconds = 180;
 };
-
-enum class PlayerInput : uint8_t { MoveUp, MoveDown, MoveLeft, MoveRight, None };
 
 }  // namespace Doom
