@@ -105,6 +105,7 @@ void GameEngine::initDemons() {
     m_demonAI.push_back(std::make_unique<Imp>(DemonType::Imp, m_spawnPoints[0]));
     m_demonAI.push_back(std::make_unique<Pinky>(DemonType::Pinky, m_spawnPoints[1]));
     m_demonAI.push_back(std::make_unique<Cacodemon>(DemonType::Cacodemon, m_spawnPoints[2]));
+    m_demonAI.push_back(std::make_unique<Cacodemon>(DemonType::LostSoul, m_spawnPoints[4]));
 
     for (size_t i = 0; i < m_demonAI.size() && i < DEMON_COUNT; i++) {
         m_state.demons[i].type = m_demonAI[i]->getType();

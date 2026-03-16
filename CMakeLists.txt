@@ -19,12 +19,14 @@ add_executable(DoomManServer
     src/server/demons/Imp.cpp
     src/server/demons/Pinky.cpp
     src/server/demons/Cacodemon.cpp
+    src/server/demons/LostSoul.cpp
     include/server/GameEngine.h
     include/server/NetworkManager.h
     include/server/Demon.h
     include/server/demons/Imp.h
     include/server/demons/Pinky.h
     include/server/demons/Cacodemon.h
+    include/server/demons/LostSoul.h
     include/server/Navigation.h
     include/common/Types.h
     include/common/Serialization.h

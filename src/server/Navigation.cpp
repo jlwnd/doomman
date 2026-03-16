@@ -13,7 +13,7 @@ PlayerInput Navigation::getNextMoveAStar(
     std::map<Position, int> gScore;
     std::map<Position, Position> cameFrom;
 
-    openSet.push({start, 0, manhattanDistance(start, target), start});
+    openSet.push({start, 0, distanceBetween(start, target), start});
     gScore[start] = 0;
 
     while (!openSet.empty()) {
@@ -49,7 +49,7 @@ PlayerInput Navigation::getNextMoveAStar(
                 cameFrom[neighbour] = current.pos;
                 gScore[neighbour] = new_gScore;
                 openSet.push(
-                    {neighbour, new_gScore, manhattanDistance(neighbour, target), current.pos});
+                    {neighbour, new_gScore, distanceBetween(neighbour, target), current.pos});
             }
         }
     }
@@ -57,7 +57,7 @@ PlayerInput Navigation::getNextMoveAStar(
     return PlayerInput::None;
 };
 
-int Navigation::manhattanDistance(const Position& start, const Position& currentPos) {
+int Navigation::distanceBetween(const Position& start, const Position& currentPos) {
     return std::abs(start.x - currentPos.x) + std::abs(start.y - currentPos.y);
 }
 
