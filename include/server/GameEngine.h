@@ -6,6 +6,7 @@
 
 #include "common/Types.h"
 #include "server/Demon.h"
+#include "server/demons/DemonSpawner.h"
 
 namespace Doom {
 
@@ -36,8 +37,7 @@ class GameEngine : public QObject {
     QTimer* m_timer;
     QElapsedTimer m_gameClock;
 
-    std::vector<std::unique_ptr<Demon>> m_demonAI;
-    std::vector<Position> m_spawnPoints;
+    std::vector<DemonSpawner> m_spawners;
 
     int m_initialTime;
     const int TICK_RATE_MS = 100;

@@ -12,7 +12,16 @@ inline constexpr int BOARD_SIZE = 21;
 inline constexpr int MAX_PLAYERS = 4;
 inline constexpr int DEMON_COUNT = 4;
 
-enum class TileType : uint8_t { Empty, Wall, Corridor, Berserk, SpawnPoint };
+enum class TileType : uint8_t {
+    Empty,
+    Wall,
+    Corridor,
+    Berserk,
+    ImpSpawn,
+    PinkySpawn,
+    CacodemonSpawn,
+    LostSoulSpawn
+};
 
 enum class DemonType : uint8_t { Imp, Pinky, Cacodemon, LostSoul };
 
@@ -40,6 +49,7 @@ struct DemonState {
     DemonType type;
     Position pos;
     bool isFrightened = false;
+    bool isAlive = true;
 };
 
 struct GameState {

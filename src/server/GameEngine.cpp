@@ -3,9 +3,7 @@
 #include <QDebug>
 #include <algorithm>
 
-#include "server/demons/Cacodemon.h"
-#include "server/demons/Imp.h"
-#include "server/demons/Pinky.h"
+#include "server/demons/DemonSpawner.h"
 
 namespace Doom {
 
@@ -88,29 +86,40 @@ void GameEngine::checkCollisions(PlayerState& player) {
 }
 
 void GameEngine::initDemons() {
+    m_spawners.clear();
+
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
-            if (m_state.board[y][x] == TileType::SpawnPoint) {
-                m_spawnPoints.push_back({x, y});
+            switch (m_state.board[y][x]) {
+                case TileType::ImpSpawn:
+                    m_spawners.emplace_back(DemonType::Imp, Position{x, y});
+                    break;
+                case TileType::PinkySpawn:
+                    m_spawners.emplace_back(DemonType::Pinky, Position{x, y});
+                    break;
+                case TileType::CacodemonSpawn:
+                    m_spawners.emplace_back(DemonType::Cacodemon, Position{x, y});
+                    break;
+                case TileType::LostSoulSpawn:
+                    m_spawners.emplace_back(DemonType::LostSoul, Position{x, y});
+                    break;
+                default:
+                    continue;
             }
         }
     }
 
-    if (m_spawnPoints.empty()) {
+    if (m_spawners.empty()) {
         qWarning() << "[GameEngine]: No spawn points found on the map!";
         return;
     }
 
-    // @TODO - change spawning mechanics
-    m_demonAI.push_back(std::make_unique<Imp>(DemonType::Imp, m_spawnPoints[0]));
-    m_demonAI.push_back(std::make_unique<Pinky>(DemonType::Pinky, m_spawnPoints[1]));
-    m_demonAI.push_back(std::make_unique<Cacodemon>(DemonType::Cacodemon, m_spawnPoints[2]));
-    m_demonAI.push_back(std::make_unique<Cacodemon>(DemonType::LostSoul, m_spawnPoints[4]));
-
-    for (size_t i = 0; i < m_demonAI.size() && i < DEMON_COUNT; i++) {
-        m_state.demons[i].type = m_demonAI[i]->getType();
-        m_state.demons[i].pos = m_demonAI[i]->getPosition();
-        m_state.demons[i].isFrightened = m_demonAI[i]->isFrightened();
+    for (size_t i = 0; i < m_spawners.size(); i++) {
+        auto* demon = m_spawners[i].getDemon();
+        m_state.demons[i].type = demon->getType();
+        m_state.demons[i].pos = demon->getPosition();
+        m_state.demons[i].isFrightened = demon->isFrightened();
+        m_state.demons[i].isAlive = true;
     }
 }
 
@@ -125,23 +134,38 @@ void GameEngine::updateDemons() {
 
     if (!target) return;
 
-    for (size_t i = 0; i < m_demonAI.size(); ++i) {
-        m_demonAI[i]->move(TICK_RATE_MS, m_state, *target);
+    for (size_t i = 0; i < m_spawners.size(); ++i) {
+        auto& spawner = m_spawners[i];
+        auto* demon = spawner.getDemon();
 
-        m_state.demons[i].pos = m_demonAI[i]->getPosition();
-        m_state.demons[i].isFrightened = m_demonAI[i]->isFrightened();
+        if (demon) {
+            demon->move(TICK_RATE_MS, m_state, *target);
 
-        if (m_state.demons[i].pos == target->pos) {
-            if (m_state.demons[i].isFrightened) {
-                target->score += 200;
+            m_state.demons[i].pos = demon->getPosition();
+            m_state.demons[i].isFrightened = demon->isFrightened();
+            m_state.demons[i].type = demon->getType();
+            m_state.demons[i].isAlive = true;
 
-                Position respawn = m_spawnPoints[rand() % m_spawnPoints.size()];
-
-                m_demonAI[i] = std::make_unique<Imp>(DemonType::Imp, respawn);
-
+            if (m_state.demons[i].pos == target->pos) {
+                if (m_state.demons[i].isFrightened) {
+                    target->score += 200;
+                    spawner.notifyDemonDeath();
+                    m_state.demons[i].isAlive = false;
+                } else {
+                    target->isAlive = false;
+                    qDebug() << "[GameEngine]: Slayer has been eliminated by a demon!";
+                }
+            }
+        } else {
+            spawner.update(TICK_RATE_MS);
+            demon = spawner.getDemon();
+            if (demon) {
+                m_state.demons[i].pos = demon->getPosition();
+                m_state.demons[i].type = demon->getType();
+                m_state.demons[i].isFrightened = demon->isFrightened();
+                m_state.demons[i].isAlive = true;
             } else {
-                target->isAlive = false;
-                qDebug() << "[GameEngine]: Slayer has been eliminated by a demon!";
+                m_state.demons[i].isAlive = false;
             }
         }
     }

@@ -33,9 +33,6 @@ void GameWidget::paintEvent(QPaintEvent* event) {
                 case TileType::Berserk:
                     painter.fillRect(rect, Qt::blue);
                     break;
-                case TileType::SpawnPoint:
-                    painter.fillRect(rect, Qt::red);
-                    break;
                 default:
                     painter.fillRect(rect, Qt::white);
                     break;
