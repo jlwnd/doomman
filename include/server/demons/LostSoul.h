@@ -8,7 +8,7 @@ namespace Doom {
 class LostSoul : public Demon {
    public:
     explicit LostSoul(DemonType type, Position startPos)
-        : Demon(type, startPos, 300), m_homeBase(startPos), m_gen(std::random_device{}()) {}
+        : Demon(type, startPos, 600), m_homeBase(startPos), m_gen(std::random_device{}()) {}
     void move(int deltaMs, const GameState& state, const PlayerState& target) override;
 
    private:
