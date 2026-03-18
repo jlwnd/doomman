@@ -39,6 +39,7 @@ class GameEngine : public QObject {
 
     std::vector<DemonSpawner> m_spawners;
 
+    int m_berserkTimerMs = 0;
     int m_initialTime;
     const int TICK_RATE_MS = 100;
 };

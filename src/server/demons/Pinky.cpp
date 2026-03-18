@@ -12,34 +12,35 @@ void Pinky::move(int deltaMs, const GameState& state, const PlayerState& target)
     if (m_timeAccumulator < currentInterval) return;
     m_timeAccumulator = 0;
 
+    if (m_frightened) {
+        performRandomFlee(state);
+        return;
+    }
+
     Position finalTarget;
 
-    if (m_frightened) {
-        finalTarget = {BOARD_SIZE - 2, 1};
-    } else {
-        finalTarget = target.pos;
-        int offset = 4;
+    finalTarget = target.pos;
+    int offset = 4;
 
-        switch (target.lastInput) {
-            case PlayerInput::MoveUp:
-                finalTarget.y -= offset;
-                break;
-            case PlayerInput::MoveDown:
-                finalTarget.y += offset;
-                break;
-            case PlayerInput::MoveLeft:
-                finalTarget.x -= offset;
-                break;
-            case PlayerInput::MoveRight:
-                finalTarget.x += offset;
-                break;
-            default:
-                break;
-        }
-
-        finalTarget.x = std::clamp(finalTarget.x, 1, BOARD_SIZE - 2);
-        finalTarget.y = std::clamp(finalTarget.y, 1, BOARD_SIZE - 2);
+    switch (target.lastInput) {
+        case PlayerInput::MoveUp:
+            finalTarget.y -= offset;
+            break;
+        case PlayerInput::MoveDown:
+            finalTarget.y += offset;
+            break;
+        case PlayerInput::MoveLeft:
+            finalTarget.x -= offset;
+            break;
+        case PlayerInput::MoveRight:
+            finalTarget.x += offset;
+            break;
+        default:
+            break;
     }
+
+    finalTarget.x = std::clamp(finalTarget.x, 1, BOARD_SIZE - 2);
+    finalTarget.y = std::clamp(finalTarget.y, 1, BOARD_SIZE - 2);
 
     PlayerInput step = Navigation::getNextMoveAStar(m_pos, finalTarget, state.board);
 
