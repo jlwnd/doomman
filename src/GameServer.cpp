@@ -7,6 +7,7 @@
 #include "server/NetworkManager.h"
 
 int main(int argc, char* argv[]) {
+    srand(time(NULL));
     QCoreApplication a(argc, argv);
 
     auto loadedState = Doom::MapLoader::loadMap("assets/levels/level1.txt");
@@ -27,7 +28,6 @@ int main(int argc, char* argv[]) {
     QObject::connect(&network, &Doom::NetworkManager::inputReceived, &engine,
                      &Doom::GameEngine::processInput);
 
-    // 4. Start the simulation
     engine.start();
 
     qDebug() << "Server is running. Logic and Network are linked.";

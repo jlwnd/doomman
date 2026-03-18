@@ -26,9 +26,6 @@ class Navigation {
         const Position& start, const Position& target,
         const std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE>& board);
 
-   private:
-    static int manhattanDistance(const Position& a, const Position& b) {
-        return std::abs(a.x - b.x) + std::abs(a.y - b.y);
-    }
+    static int distanceBetween(const Position& a, const Position& b);
 };
 }  // namespace Doom

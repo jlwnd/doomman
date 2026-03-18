@@ -3,10 +3,14 @@
 #include <QDebug>
 #include <algorithm>
 
+#include "server/demons/DemonSpawner.h"
+
 namespace Doom {
 
 GameEngine::GameEngine(GameState& state, QObject* parent)
     : QObject(parent), m_state(state), m_initialTime(state.timeLeftSeconds) {
+    initDemons();
+
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &GameEngine::tick);
 }
@@ -49,6 +53,7 @@ void GameEngine::processInput(uint32_t playerId, PlayerInput input) {
 
     for (auto& player : m_state.players) {
         if (player.id == playerId && player.isAlive) {
+            player.lastInput = input == PlayerInput::None ? player.lastInput : input;
             movePlayer(player, dx, dy);
             break;
         }
@@ -80,8 +85,90 @@ void GameEngine::checkCollisions(PlayerState& player) {
     }
 }
 
+void GameEngine::initDemons() {
+    m_spawners.clear();
+
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            switch (m_state.board[y][x]) {
+                case TileType::ImpSpawn:
+                    m_spawners.emplace_back(DemonType::Imp, Position{x, y});
+                    break;
+                case TileType::PinkySpawn:
+                    m_spawners.emplace_back(DemonType::Pinky, Position{x, y});
+                    break;
+                case TileType::CacodemonSpawn:
+                    m_spawners.emplace_back(DemonType::Cacodemon, Position{x, y});
+                    break;
+                case TileType::LostSoulSpawn:
+                    m_spawners.emplace_back(DemonType::LostSoul, Position{x, y});
+                    break;
+                default:
+                    continue;
+            }
+        }
+    }
+
+    if (m_spawners.empty()) {
+        qWarning() << "[GameEngine]: No spawn points found on the map!";
+        return;
+    }
+
+    for (size_t i = 0; i < m_spawners.size(); i++) {
+        auto* demon = m_spawners[i].getDemon();
+        m_state.demons[i].type = demon->getType();
+        m_state.demons[i].pos = demon->getPosition();
+        m_state.demons[i].isFrightened = demon->isFrightened();
+        m_state.demons[i].isAlive = true;
+    }
+}
+
 void GameEngine::updateDemons() {
-    // AI logic will be implemented here
+    PlayerState* target = nullptr;
+    for (auto& p : m_state.players) {
+        if (p.isAlive) {
+            target = &p;
+            break;
+        }
+    }
+
+    if (!target) return;
+
+    for (size_t i = 0; i < m_spawners.size(); ++i) {
+        auto& spawner = m_spawners[i];
+        auto* demon = spawner.getDemon();
+
+        if (demon) {
+            demon->move(TICK_RATE_MS, m_state, *target);
+
+            m_state.demons[i].pos = demon->getPosition();
+            m_state.demons[i].isFrightened = demon->isFrightened();
+            m_state.demons[i].type = demon->getType();
+            m_state.demons[i].isAlive = true;
+
+            if (m_state.demons[i].pos == target->pos) {
+                if (m_state.demons[i].isFrightened) {
+                    target->score += 200;
+                    spawner.notifyDemonDeath();
+                    m_state.demons[i].isAlive = false;
+                } else {
+                    target->isAlive = false;
+                    qDebug() << "[GameEngine]: Slayer has been eliminated by a demon!";
+                }
+            }
+        } else {
+            spawner.update(TICK_RATE_MS);
+            demon = spawner.getDemon();
+            if (demon) {
+                m_state.demons[i].pos = demon->getPosition();
+                m_state.demons[i].type = demon->getType();
+                m_state.demons[i].isFrightened = demon->isFrightened();
+                m_state.demons[i].isAlive = true;
+            } else {
+                m_state.demons[i].isAlive = false;
+            }
+        }
+    }
 }
 
 }  // namespace Doom

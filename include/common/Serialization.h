@@ -23,11 +23,11 @@ inline QDataStream& operator>>(QDataStream& in, PlayerState& p) {
 
 // DemonState
 inline QDataStream& operator<<(QDataStream& out, const DemonState& d) {
-    return out << static_cast<uint8_t>(d.type) << d.pos << d.isFrightened;
+    return out << static_cast<uint8_t>(d.type) << d.pos << d.isFrightened << d.isAlive;
 }
 inline QDataStream& operator>>(QDataStream& in, DemonState& d) {
     uint8_t type;
-    in >> type >> d.pos >> d.isFrightened;
+    in >> type >> d.pos >> d.isFrightened >> d.isAlive;
     d.type = static_cast<DemonType>(type);
     return in;
 }

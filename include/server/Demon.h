@@ -1,17 +1,16 @@
 #pragma once
-#include <memory>
-
 #include "common/Types.h"
 
 namespace Doom {
 class Demon {
    public:
-    explicit Demon(DemonType type, Position startPos) : m_type(type), m_pos(startPos) {}
+    explicit Demon(DemonType type, Position startPos, int speed)
+        : m_pos(startPos), m_type(type), m_moveIntervalMs(speed) {}
     virtual ~Demon() = default;
 
-    virtual void move(const GameState& state, const PlayerState& target) = 0;
+    virtual void move(int deltaMs, const GameState& state, const PlayerState& target) = 0;
 
-    Position getPostion() const {
+    Position getPosition() const {
         return m_pos;
     }
     DemonType getType() const {
@@ -28,5 +27,7 @@ class Demon {
     Position m_pos;
     DemonType m_type;
     bool m_frightened = false;
+    int m_timeAccumulator = 0;
+    int m_moveIntervalMs;
 };
 }  // namespace Doom

@@ -5,6 +5,8 @@
 #include <QTimer>
 
 #include "common/Types.h"
+#include "server/Demon.h"
+#include "server/demons/DemonSpawner.h"
 
 namespace Doom {
 
@@ -27,11 +29,15 @@ class GameEngine : public QObject {
    private:
     void movePlayer(PlayerState& player, int dx, int dy);
     void checkCollisions(PlayerState& player);
+
+    void initDemons();
     void updateDemons();
 
     GameState& m_state;
     QTimer* m_timer;
     QElapsedTimer m_gameClock;
+
+    std::vector<DemonSpawner> m_spawners;
 
     int m_initialTime;
     const int TICK_RATE_MS = 100;

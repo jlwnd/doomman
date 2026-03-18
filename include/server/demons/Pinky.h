@@ -2,9 +2,9 @@
 #include "server/Demon.h"
 
 namespace Doom {
-class Imp : public Demon {
+class Pinky : public Demon {
    public:
-    explicit Imp(DemonType type, Position startPos) : Demon(type, startPos, 400) {}
+    explicit Pinky(DemonType type, Position startPos) : Demon(type, startPos, 250) {}
 
     void move(int deltaMs, const GameState& state, const PlayerState& target) override;
 };

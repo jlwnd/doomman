@@ -40,8 +40,14 @@ TileType MapLoader::charToTile(char c) {
             return TileType::Corridor;
         case 'B':
             return TileType::Berserk;
-        case 'S':
-            return TileType::SpawnPoint;
+        case 'i':
+            return TileType::ImpSpawn;
+        case 'p':
+            return TileType::PinkySpawn;
+        case 'c':
+            return TileType::CacodemonSpawn;
+        case 'l':
+            return TileType::LostSoulSpawn;
         default:
             return TileType::Empty;
     }
