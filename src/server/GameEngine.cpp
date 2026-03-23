@@ -25,6 +25,17 @@ void GameEngine::tick() {
     int secondsPassed = static_cast<int>(msPassed / 1000);
     m_state.timeLeftSeconds = std::max(0, m_initialTime - secondsPassed);
 
+    if (m_berserkTimerMs > 0) {
+        m_berserkTimerMs -= TICK_RATE_MS;
+        if (m_berserkTimerMs <= 0) {
+            m_berserkTimerMs = 0;
+            for (auto& p : m_state.players) p.hasBerserk = false;
+            for (auto& spawner : m_spawners) {
+                if (auto* demon = spawner.getDemon()) demon->setFrightened(false);
+            }
+        }
+    }
+
     updateDemons();
 
     emit gameStateUpdated();
@@ -78,6 +89,12 @@ void GameEngine::checkCollisions(PlayerState& player) {
 
     if (tile == TileType::Berserk) {
         player.hasBerserk = true;
+        m_berserkTimerMs = 10000;
+        for (auto& spawner : m_spawners) {
+            if (auto* demon = spawner.getDemon()) {
+                demon->setFrightened(true);
+            }
+        }
         tile = TileType::Empty;
     } else if (tile == TileType::Corridor) {
         player.score += 10;

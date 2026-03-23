@@ -13,7 +13,10 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
     }
     m_timeAccumulator = 0;
 
-    if (m_frightened) return;
+    if (m_frightened) {
+        performRandomFlee(state);
+        return;
+    }
 
     int distToPlayer = Navigation::distanceBetween(m_pos, target.pos);
 

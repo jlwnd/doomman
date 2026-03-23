@@ -12,6 +12,11 @@ void Imp::move(int deltaMs, const GameState& state, const PlayerState& target) {
 
     m_timeAccumulator = 0;
 
+    if (m_frightened) {
+        performRandomFlee(state);
+        return;
+    }
+
     PlayerInput step = Navigation::getNextMoveAStar(m_pos, target.pos, state.board);
 
     int dx = 0;
