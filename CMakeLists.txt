@@ -40,8 +40,12 @@ add_executable(DoomManClient
     src/GameClient.cpp
     src/client/NetworkManager.cpp
     src/client/GameWidget.cpp
+    src/client/MainWindow.cpp
+    src/client/MainMenuWidget.cpp
     include/client/NetworkManager.h
     include/client/GameWidget.h
+    include/client/MainWindow.h
+    include/client/MainMenuWidget.h
     include/common/Types.h
     include/common/Serialization.h
 )
