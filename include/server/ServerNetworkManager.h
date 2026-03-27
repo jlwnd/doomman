@@ -9,11 +9,11 @@
 
 namespace Doom {
 
-class NetworkManager : public QObject {
+class ServerNetworkManager : public QObject {
     Q_OBJECT
    public:
-    explicit NetworkManager(quint16 port, QObject* parent = nullptr);
-    virtual ~NetworkManager();
+    explicit ServerNetworkManager(quint16 port, QObject* parent = nullptr);
+    virtual ~ServerNetworkManager();
 
    public slots:
     void broadcastState(const GameState& state);

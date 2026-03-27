@@ -27,15 +27,24 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     setWindowTitle("DoomMan");
     resize(640, 640);
-    
+
     setStyleSheet("QMainWindow { background-color: #0b0c10; }");
-    
+
     m_stackedWidget->setCurrentWidget(m_mainMenu);
 }
 
 void MainWindow::handleHostGame(const QString& nick) {
     qDebug() << "Host game clicked with nick:" << nick;
-    // @TODO: Implement lobby/server creation
+
+    m_localServer = std::make_unique<GameServerHost>();
+
+    try {
+        m_localServer->start(666);
+    } catch (const std::exception& e) {
+        qCritical() << "Server couldn't start: " << e.what();
+        return;
+    }
+
     m_stackedWidget->setCurrentWidget(m_gameView);
     m_networkManager->connectToServer("127.0.0.1", 666);
 }

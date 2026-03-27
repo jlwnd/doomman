@@ -33,7 +33,7 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
     m_nickEdit = new QLineEdit(container);
     m_nickEdit->setObjectName("NickEdit");
     m_nickEdit->setFixedWidth(150);
-    
+
     nickLayout->addWidget(nickLabel);
     nickLayout->addWidget(m_nickEdit);
 
