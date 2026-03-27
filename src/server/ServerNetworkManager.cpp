@@ -1,4 +1,4 @@
-#include "server/NetworkManager.h"
+#include "server/ServerNetworkManager.h"
 
 #include <QDataStream>
 #include <QDebug>
@@ -7,9 +7,9 @@
 
 namespace Doom {
 
-NetworkManager::NetworkManager(quint16 port, QObject* parent)
+ServerNetworkManager::ServerNetworkManager(quint16 port, QObject* parent)
     : QObject(parent), m_server(new QTcpServer(this)) {
-    connect(m_server, &QTcpServer::newConnection, this, &NetworkManager::onNewConnection);
+    connect(m_server, &QTcpServer::newConnection, this, &ServerNetworkManager::onNewConnection);
 
     if (m_server->listen(QHostAddress::Any, port)) {
         qDebug() << "NetworkManager: TCP Server started on port" << port;
@@ -18,31 +18,32 @@ NetworkManager::NetworkManager(quint16 port, QObject* parent)
     }
 }
 
-NetworkManager::~NetworkManager() = default;
+ServerNetworkManager::~ServerNetworkManager() = default;
 
-void NetworkManager::onNewConnection() {
+void ServerNetworkManager::onNewConnection() {
     while (m_server->hasPendingConnections()) {
         QTcpSocket* client = m_server->nextPendingConnection();
         uint32_t assignedId = m_nextPlayerId++;
         m_clientToPlayerId[client] = assignedId;
 
-        connect(client, &QTcpSocket::disconnected, this, &NetworkManager::onClientDisconnected);
-        connect(client, &QTcpSocket::readyRead, this, &NetworkManager::onReadyRead);
+        connect(client, &QTcpSocket::disconnected, this,
+                &ServerNetworkManager::onClientDisconnected);
+        connect(client, &QTcpSocket::readyRead, this, &ServerNetworkManager::onReadyRead);
 
         qDebug() << "NetworkManager: Client connected. Assigned ID:" << assignedId;
     }
 }
 
-void NetworkManager::onClientDisconnected() {
+void ServerNetworkManager::onClientDisconnected() {
     auto* client = qobject_cast<QTcpSocket*>(sender());
     if (client) {
         m_clientToPlayerId.remove(client);
         client->deleteLater();
-        qDebug() << "NetworkManager: Client disconnected";
+        qDebug() << "[ServerNetworkManager]: Client disconnected";
     }
 }
 
-void NetworkManager::onReadyRead() {
+void ServerNetworkManager::onReadyRead() {
     auto* client = qobject_cast<QTcpSocket*>(sender());
     if (!client || !m_clientToPlayerId.contains(client)) return;
 
@@ -56,7 +57,7 @@ void NetworkManager::onReadyRead() {
     }
 }
 
-void NetworkManager::broadcastState(const GameState& state) {
+void ServerNetworkManager::broadcastState(const GameState& state) {
     if (m_clientToPlayerId.isEmpty()) return;
 
     QByteArray packet;

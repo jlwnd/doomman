@@ -14,21 +14,23 @@ add_executable(DoomManServer
     src/GameServer.cpp 
     src/server/MapLoader.cpp
     src/server/GameEngine.cpp
-    src/server/NetworkManager.cpp
+    src/server/ServerNetworkManager.cpp
     src/server/Navigation.cpp
     src/server/demons/Imp.cpp
     src/server/demons/Pinky.cpp
     src/server/demons/Cacodemon.cpp
     src/server/demons/LostSoul.cpp
     src/server/demons/DemonSpawner.cpp
+    src/server/GameServerHost.cpp
     include/server/GameEngine.h
-    include/server/NetworkManager.h
+    include/server/ServerNetworkManager.h
     include/server/Demon.h
     include/server/demons/Imp.h
     include/server/demons/Pinky.h
     include/server/demons/Cacodemon.h
     include/server/demons/LostSoul.h
     include/server/demons/DemonSpawner.h
+    include/server/GameServerHost.h
     include/server/Navigation.h
     include/common/Types.h
     include/common/Serialization.h
@@ -42,10 +44,24 @@ add_executable(DoomManClient
     src/client/GameWidget.cpp
     src/client/MainWindow.cpp
     src/client/MainMenuWidget.cpp
+    src/server/GameServerHost.cpp
+    src/server/GameEngine.cpp
+    src/server/MapLoader.cpp
+    src/server/ServerNetworkManager.cpp 
+    src/server/Navigation.cpp
+    src/server/demons/Imp.cpp
+    src/server/demons/Pinky.cpp
+    src/server/demons/Cacodemon.cpp
+    src/server/demons/LostSoul.cpp
+    src/server/demons/DemonSpawner.cpp
+
     include/client/NetworkManager.h
     include/client/GameWidget.h
     include/client/MainWindow.h
     include/client/MainMenuWidget.h
+    include/server/GameServerHost.h
+    include/server/GameEngine.h
+    include/server/ServerNetworkManager.h
     include/common/Types.h
     include/common/Serialization.h
 )

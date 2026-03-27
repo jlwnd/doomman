@@ -5,6 +5,7 @@
 #include "client/GameWidget.h"
 #include "client/MainMenuWidget.h"
 #include "client/NetworkManager.h"
+#include "server/GameServerHost.h"
 
 namespace Doom {
 class MainWindow : public QMainWindow {
@@ -22,5 +23,6 @@ class MainWindow : public QMainWindow {
     MainMenuWidget* m_mainMenu;
     GameWidget* m_gameView;
     ClientNetworkManager* m_networkManager;
+    std::unique_ptr<GameServerHost> m_localServer;
 };
 }  // namespace Doom
