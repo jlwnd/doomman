@@ -1,6 +1,6 @@
 #include "server/demons/Cacodemon.h"
 
-namespace Doom {
+namespace DoomMan {
 
 void Cacodemon::move(int deltaMs, const GameState& state, const PlayerState& target) {
     m_timeAccumulator += deltaMs;
@@ -10,4 +10,4 @@ void Cacodemon::move(int deltaMs, const GameState& state, const PlayerState& tar
     // Always randomly move for cacodemon
     performRandomFlee(state);
 }
-}  // namespace Doom
+} // namespace DoomMan

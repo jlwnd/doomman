@@ -4,7 +4,7 @@
 
 #include "common/Types.h"
 
-namespace Doom {
+namespace DoomMan {
 // Position
 inline QDataStream& operator<<(QDataStream& out, const Position& p) {
     return out << p.x << p.y;
@@ -97,4 +97,4 @@ inline QDataStream& operator>>(QDataStream& in, PlayerInput& input) {
     return in;
 }
 
-}  // namespace Doom
+} // namespace DoomMan

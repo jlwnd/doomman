@@ -5,7 +5,7 @@
 
 #include "common/Serialization.h"
 
-namespace Doom {
+namespace DoomMan {
 
 ServerNetworkManager::ServerNetworkManager(quint16 port, QObject* parent)
     : QObject(parent), m_server(new QTcpServer(this)) {
@@ -74,4 +74,4 @@ void ServerNetworkManager::broadcastState(const GameState& state) {
     }
 }
 
-}  // namespace Doom
+} // namespace DoomMan

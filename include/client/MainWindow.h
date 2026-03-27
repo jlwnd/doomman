@@ -7,7 +7,7 @@
 #include "client/NetworkManager.h"
 #include "server/GameServerHost.h"
 
-namespace Doom {
+namespace DoomMan {
 class MainWindow : public QMainWindow {
     Q_OBJECT
    public:
@@ -25,4 +25,4 @@ class MainWindow : public QMainWindow {
     ClientNetworkManager* m_networkManager;
     std::unique_ptr<GameServerHost> m_localServer;
 };
-}  // namespace Doom
+} // namespace DoomMan

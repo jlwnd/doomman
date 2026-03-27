@@ -7,7 +7,7 @@
 #include "server/MapLoader.h"
 #include "server/ServerNetworkManager.h"
 
-namespace Doom {
+namespace DoomMan {
 void GameServerHost::start(int port) {
     srand(time(NULL));
 
@@ -37,4 +37,4 @@ void GameServerHost::onEngineUpdate() {
 
     m_networkManager->broadcastState(m_gameState);
 }
-}  // namespace Doom
+} // namespace DoomMan

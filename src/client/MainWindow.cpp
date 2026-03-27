@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDebug>
 
-namespace Doom {
+namespace DoomMan {
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_stackedWidget = new QStackedWidget(this);
@@ -60,4 +60,4 @@ void MainWindow::handleExit() {
     QApplication::quit();
 }
 
-}  // namespace Doom
+} // namespace DoomMan

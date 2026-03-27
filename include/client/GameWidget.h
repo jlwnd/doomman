@@ -3,7 +3,7 @@
 
 #include "common/Types.h"
 
-namespace Doom {
+namespace DoomMan {
 class GameWidget : public QWidget {
     Q_OBJECT
    public:
@@ -21,4 +21,4 @@ class GameWidget : public QWidget {
     GameState m_currentState;
     const int TILE_SIZE = 30;
 };
-}  // namespace Doom
+} // namespace DoomMan

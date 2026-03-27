@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-namespace Doom {
+namespace DoomMan {
 
 MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
     auto* mainLayout = new QVBoxLayout(this);
@@ -107,4 +107,4 @@ void MainMenuWidget::onExitClicked() {
     emit sigExit();
 }
 
-}  // namespace Doom
+} // namespace DoomMan

@@ -5,7 +5,7 @@
 
 #include "server/demons/DemonSpawner.h"
 
-namespace Doom {
+namespace DoomMan {
 
 GameEngine::GameEngine(GameState& state, QObject* parent)
     : QObject(parent), m_state(state), m_initialTime(state.timeLeftSeconds) {
@@ -188,4 +188,4 @@ void GameEngine::updateDemons() {
     }
 }
 
-}  // namespace Doom
+} // namespace DoomMan

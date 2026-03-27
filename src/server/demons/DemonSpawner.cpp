@@ -5,7 +5,7 @@
 #include "server/demons/LostSoul.h"
 #include "server/demons/Pinky.h"
 
-namespace Doom {
+namespace DoomMan {
 
 namespace {
 std::unique_ptr<Demon> createDemon(DemonType type, Position pos) {
@@ -49,4 +49,4 @@ Demon* DemonSpawner::getDemon() const {
     return m_demon.get();
 }
 
-}  // namespace Doom
+} // namespace DoomMan

@@ -4,7 +4,7 @@
 
 #include "server/Navigation.h"
 
-namespace Doom {
+namespace DoomMan {
 void Pinky::move(int deltaMs, const GameState& state, const PlayerState& target) {
     m_timeAccumulator += deltaMs;
     int currentInterval = m_frightened ? m_moveIntervalMs * 2 : m_moveIntervalMs;
@@ -59,4 +59,4 @@ void Pinky::move(int deltaMs, const GameState& state, const PlayerState& target)
         m_pos.y += dy;
     }
 }
-}  // namespace Doom
+} // namespace DoomMan

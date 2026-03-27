@@ -8,7 +8,7 @@
 #include "server/Demon.h"
 #include "server/demons/DemonSpawner.h"
 
-namespace Doom {
+namespace DoomMan {
 
 class GameEngine : public QObject {
     Q_OBJECT
@@ -44,4 +44,4 @@ class GameEngine : public QObject {
     const int TICK_RATE_MS = 100;
 };
 
-}  // namespace Doom
+} // namespace DoomMan

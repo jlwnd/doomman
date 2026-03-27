@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace Doom {
+namespace DoomMan {
 
 inline constexpr int BOARD_SIZE = 21;
 inline constexpr int MAX_PLAYERS = 4;
@@ -64,4 +64,4 @@ struct GameState {
     int32_t timeLeftSeconds = 180;
 };
 
-}  // namespace Doom
+} // namespace DoomMan

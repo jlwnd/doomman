@@ -5,7 +5,7 @@
 #include "server/GameEngine.h"
 #include "server/ServerNetworkManager.h"
 
-namespace Doom {
+namespace DoomMan {
 
 class GameServerHost : public QObject {
    public:
@@ -21,4 +21,4 @@ class GameServerHost : public QObject {
     std::unique_ptr<ServerNetworkManager> m_networkManager;
 };
 
-}  // namespace Doom
+} // namespace DoomMan

@@ -10,23 +10,23 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     QCoreApplication a(argc, argv);
 
-    auto loadedState = Doom::MapLoader::loadMap("assets/levels/level1.txt");
+    auto loadedState = DoomMan::MapLoader::loadMap("assets/levels/level1.txt");
     if (!loadedState) return 1;
 
-    Doom::GameState game = *loadedState;
+    DoomMan::GameState game = *loadedState;
 
     if (!game.players.empty()) {
         game.players[0].id = 0;
     }
 
-    Doom::GameEngine engine(game);
-    Doom::ServerNetworkManager network(666);  // Listening on port 666 >:)
+    DoomMan::GameEngine engine(game);
+    DoomMan::ServerNetworkManager network(666);  // Listening on port 666 >:)
 
-    QObject::connect(&engine, &Doom::GameEngine::gameStateUpdated,
+    QObject::connect(&engine, &DoomMan::GameEngine::gameStateUpdated,
                      [&]() { network.broadcastState(game); });
 
-    QObject::connect(&network, &Doom::ServerNetworkManager::inputReceived, &engine,
-                     &Doom::GameEngine::processInput);
+    QObject::connect(&network, &DoomMan::ServerNetworkManager::inputReceived, &engine,
+                     &DoomMan::GameEngine::processInput);
 
     engine.start();
 

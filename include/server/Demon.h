@@ -1,9 +1,10 @@
 #pragma once
-#include "common/Types.h"
-#include <vector>
 #include <cstdlib>
+#include <vector>
 
-namespace Doom {
+#include "common/Types.h"
+
+namespace DoomMan {
 class Demon {
    public:
     explicit Demon(DemonType type, Position startPos, int speed)
@@ -51,4 +52,4 @@ class Demon {
         }
     }
 };
-}  // namespace Doom
+} // namespace DoomMan

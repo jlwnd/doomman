@@ -4,7 +4,7 @@
 
 #include "server/Demon.h"
 
-namespace Doom {
+namespace DoomMan {
 class LostSoul : public Demon {
    public:
     explicit LostSoul(DemonType type, Position startPos)
@@ -18,4 +18,4 @@ class LostSoul : public Demon {
     std::mt19937 m_gen;
 };
 
-}  // namespace Doom
+} // namespace DoomMan

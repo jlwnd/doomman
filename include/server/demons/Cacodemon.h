@@ -3,7 +3,7 @@
 
 #include "server/Demon.h"
 
-namespace Doom {
+namespace DoomMan {
 class Cacodemon : public Demon {
    public:
     explicit Cacodemon(DemonType type, Position startPos)
@@ -14,4 +14,4 @@ class Cacodemon : public Demon {
    private:
     std::mt19937 m_gen;
 };
-}  // namespace Doom
+} // namespace DoomMan

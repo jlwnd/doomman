@@ -5,7 +5,7 @@
 #include <queue>
 #include <set>
 
-namespace Doom {
+namespace DoomMan {
 PlayerInput Navigation::getNextMoveAStar(
     const Position& start, const Position& target,
     const std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE>& board) {
@@ -61,4 +61,4 @@ int Navigation::distanceBetween(const Position& start, const Position& currentPo
     return std::abs(start.x - currentPos.x) + std::abs(start.y - currentPos.y);
 }
 
-}  // namespace Doom
+} // namespace DoomMan

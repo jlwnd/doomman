@@ -4,7 +4,7 @@
 
 #include "common/Serialization.h"
 
-namespace Doom {
+namespace DoomMan {
 
 ClientNetworkManager::ClientNetworkManager(QObject* parent)
     : QObject(parent), m_socket(new QTcpSocket(this)) {
@@ -44,4 +44,4 @@ void ClientNetworkManager::sendInput(PlayerInput input) {
     m_socket->write(block);
 }
 
-}  // namespace Doom
+} // namespace DoomMan

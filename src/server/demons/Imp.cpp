@@ -2,7 +2,7 @@
 
 #include "server/Navigation.h"
 
-namespace Doom {
+namespace DoomMan {
 void Imp::move(int deltaMs, const GameState& state, const PlayerState& target) {
     m_timeAccumulator += deltaMs;
     int currentInterval = m_frightened ? m_moveIntervalMs * 2 : m_moveIntervalMs;
@@ -48,4 +48,4 @@ void Imp::move(int deltaMs, const GameState& state, const PlayerState& target) {
         m_pos.y = newY;
     }
 }
-}  // namespace Doom
+} // namespace DoomMan

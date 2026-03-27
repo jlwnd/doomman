@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace Doom {
+namespace DoomMan {
 
 std::optional<GameState> MapLoader::loadMap(const std::string& filePath) {
     std::ifstream file(filePath);
@@ -53,4 +53,4 @@ TileType MapLoader::charToTile(char c) {
     }
 }
 
-}  // namespace Doom
+} // namespace DoomMan

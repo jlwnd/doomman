@@ -7,7 +7,7 @@
 
 #include "common/Types.h"
 
-namespace Doom {
+namespace DoomMan {
 
 class ServerNetworkManager : public QObject {
     Q_OBJECT
@@ -32,4 +32,4 @@ class ServerNetworkManager : public QObject {
     uint32_t m_nextPlayerId = 0;
 };
 
-}  // namespace Doom
+} // namespace DoomMan

@@ -3,7 +3,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-namespace Doom {
+namespace DoomMan {
 
 GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
     setAttribute(Qt::WA_OpaquePaintEvent);
@@ -100,4 +100,4 @@ void GameWidget::keyPressEvent(QKeyEvent* event) {
     }
 }
 
-}  // namespace Doom
+} // namespace DoomMan

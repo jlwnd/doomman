@@ -4,7 +4,7 @@
 
 #include "common/Serialization.h"
 
-namespace Doom {
+namespace DoomMan {
 class ClientNetworkManager : public QObject {
     Q_OBJECT
    public:
@@ -21,4 +21,4 @@ class ClientNetworkManager : public QObject {
    private:
     QTcpSocket* m_socket;
 };
-}  // namespace Doom
+} // namespace DoomMan

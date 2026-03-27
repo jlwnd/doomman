@@ -1,10 +1,10 @@
 #pragma once
-#include <QWidget>
 #include <QString>
+#include <QWidget>
 
 class QLineEdit;
 
-namespace Doom {
+namespace DoomMan {
 class MainMenuWidget : public QWidget {
     Q_OBJECT
    public:
@@ -23,4 +23,4 @@ class MainMenuWidget : public QWidget {
    private:
     QLineEdit* m_nickEdit;
 };
-}  // namespace Doom
+} // namespace DoomMan

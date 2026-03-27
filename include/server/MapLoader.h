@@ -5,7 +5,7 @@
 
 #include "common/Types.h"
 
-namespace Doom {
+namespace DoomMan {
 
 class MapLoader {
    public:
@@ -15,4 +15,4 @@ class MapLoader {
     static TileType charToTile(char c);
 };
 
-}  // namespace Doom
+} // namespace DoomMan

@@ -4,7 +4,7 @@
 
 #include "common/Types.h"
 
-namespace Doom {
+namespace DoomMan {
 struct Node {
     Position pos;
     int g;
@@ -28,4 +28,4 @@ class Navigation {
 
     static int distanceBetween(const Position& a, const Position& b);
 };
-}  // namespace Doom
+} // namespace DoomMan

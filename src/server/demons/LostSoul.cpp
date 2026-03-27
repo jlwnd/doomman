@@ -4,7 +4,7 @@
 
 #include "server/Navigation.h"
 
-namespace Doom {
+namespace DoomMan {
 void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& target) {
     m_timeAccumulator += deltaMs;
     int currentInterval = m_frightened ? m_moveIntervalMs * 2 : m_moveIntervalMs;
@@ -43,10 +43,14 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
             PlayerInput nextStep = Navigation::getNextMoveAStar(m_pos, m_homeBase, state.board);
 
             int dx = 0, dy = 0;
-            if (nextStep == PlayerInput::MoveUp) dy = -1;
-            else if (nextStep == PlayerInput::MoveDown) dy = 1;
-            else if (nextStep == PlayerInput::MoveLeft) dx = -1;
-            else if (nextStep == PlayerInput::MoveRight) dx = 1;
+            if (nextStep == PlayerInput::MoveUp)
+                dy = -1;
+            else if (nextStep == PlayerInput::MoveDown)
+                dy = 1;
+            else if (nextStep == PlayerInput::MoveLeft)
+                dx = -1;
+            else if (nextStep == PlayerInput::MoveRight)
+                dx = 1;
 
             if (state.board[m_pos.y + dy][m_pos.x + dx] != TileType::Wall) {
                 m_pos.x += dx;
@@ -79,4 +83,4 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
         }
     }
 }
-}  // namespace Doom
+} // namespace DoomMan

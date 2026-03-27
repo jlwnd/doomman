@@ -1,10 +1,11 @@
 #pragma once
 
 #include <memory>
+
 #include "common/Types.h"
 #include "server/Demon.h"
 
-namespace Doom {
+namespace DoomMan {
 
 class DemonSpawner {
    public:
@@ -16,8 +17,12 @@ class DemonSpawner {
 
     Demon* getDemon() const;
 
-    Position getSpawnPos() const { return m_spawnPos; }
-    DemonType getType() const { return m_type; }
+    Position getSpawnPos() const {
+        return m_spawnPos;
+    }
+    DemonType getType() const {
+        return m_type;
+    }
 
    private:
     DemonType m_type;
@@ -29,4 +34,4 @@ class DemonSpawner {
     static constexpr int RESPAWN_DELAY_MS = 15000;
 };
 
-}  // namespace Doom
+} // namespace DoomMan
