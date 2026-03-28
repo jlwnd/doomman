@@ -11,6 +11,7 @@ class GameServerHost : public QObject {
    public:
     void start(int port);
     void stop();
+    void handleJoinRequest(uint32_t playerId, const QString& nick);
 
    private slots:
     void onEngineUpdate();
@@ -21,4 +22,4 @@ class GameServerHost : public QObject {
     std::unique_ptr<ServerNetworkManager> m_networkManager;
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan

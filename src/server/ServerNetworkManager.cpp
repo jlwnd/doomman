@@ -3,6 +3,7 @@
 #include <QDataStream>
 #include <QDebug>
 
+#include "common/Protocol.h"
 #include "common/Serialization.h"
 
 namespace DoomMan {
@@ -12,9 +13,9 @@ ServerNetworkManager::ServerNetworkManager(quint16 port, QObject* parent)
     connect(m_server, &QTcpServer::newConnection, this, &ServerNetworkManager::onNewConnection);
 
     if (m_server->listen(QHostAddress::Any, port)) {
-        qDebug() << "NetworkManager: TCP Server started on port" << port;
+        qDebug() << "[NetworkManager]: TCP Server started on port" << port;
     } else {
-        qCritical() << "NetworkManager: Failed to start server on port" << port;
+        qCritical() << "[NetworkManager]: Failed to start server on port" << port;
     }
 }
 
@@ -30,7 +31,7 @@ void ServerNetworkManager::onNewConnection() {
                 &ServerNetworkManager::onClientDisconnected);
         connect(client, &QTcpSocket::readyRead, this, &ServerNetworkManager::onReadyRead);
 
-        qDebug() << "NetworkManager: Client connected. Assigned ID:" << assignedId;
+        qDebug() << "[NetworkManager]: Client connected. Assigned ID:" << assignedId;
     }
 }
 
@@ -51,9 +52,25 @@ void ServerNetworkManager::onReadyRead() {
     in.setVersion(QDataStream::Qt_6_0);
 
     while (!in.atEnd()) {
-        PlayerInput input;
-        in >> input;
-        emit inputReceived(m_clientToPlayerId[client], input);
+        in.startTransaction();
+        PacketType type;
+        in >> type;
+
+        switch (type) {
+            case PacketType::JoinRequest: {
+                QString nick;
+                in >> nick;
+
+                if (!in.commitTransaction()) {
+                    return;
+                }
+
+                emit joinRequested(m_clientToPlayerId[client], nick);
+                break;
+            }
+        }
+
+        in.commitTransaction();
     }
 }
 
@@ -74,4 +91,4 @@ void ServerNetworkManager::broadcastState(const GameState& state) {
     }
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

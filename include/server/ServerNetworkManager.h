@@ -20,6 +20,7 @@ class ServerNetworkManager : public QObject {
 
    signals:
     void inputReceived(uint32_t playerId, PlayerInput input);
+    void joinRequested(uint32_t playerId, const QString& nick);
 
    private slots:
     void onNewConnection();
@@ -32,4 +33,4 @@ class ServerNetworkManager : public QObject {
     uint32_t m_nextPlayerId = 0;
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan
