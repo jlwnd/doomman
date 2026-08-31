@@ -3,7 +3,6 @@
 #include <QDataStream>
 
 #include "common/Types.h"
-
 namespace DoomMan {
 // Position
 inline QDataStream& operator<<(QDataStream& out, const Position& p) {
@@ -15,10 +14,10 @@ inline QDataStream& operator>>(QDataStream& in, Position& p) {
 
 // PlayerState
 inline QDataStream& operator<<(QDataStream& out, const PlayerState& p) {
-    return out << p.id << p.pos << p.score << p.isAlive << p.hasBerserk;
+    return out << p.id << p.pos << p.name << p.score << p.isReady << p.isAlive << p.hasBerserk;
 }
 inline QDataStream& operator>>(QDataStream& in, PlayerState& p) {
-    return in >> p.id >> p.pos >> p.score >> p.isAlive >> p.hasBerserk;
+    return in >> p.id >> p.pos >> p.name >> p.score >> p.isReady >> p.isAlive >> p.hasBerserk;
 }
 
 // DemonState
@@ -97,4 +96,4 @@ inline QDataStream& operator>>(QDataStream& in, PlayerInput& input) {
     return in;
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

@@ -34,6 +34,7 @@ add_executable(DoomManServer
     include/server/Navigation.h
     include/common/Types.h
     include/common/Serialization.h
+    include/common/Protocol.h
 )
 target_link_libraries(DoomManServer PRIVATE Qt6::Network Qt6::Core)
 
@@ -64,6 +65,7 @@ add_executable(DoomManClient
     include/server/ServerNetworkManager.h
     include/common/Types.h
     include/common/Serialization.h
+    include/common/Protocol.h
 )
 target_link_libraries(DoomManClient PRIVATE Qt6::Widgets Qt6::Network)
 

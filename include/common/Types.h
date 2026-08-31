@@ -41,6 +41,8 @@ struct PlayerState {
     Position pos;
     PlayerInput lastInput = PlayerInput::None;
     uint32_t score = 0;
+    QString name;
+    bool isReady = false;
     bool isAlive = true;
     bool hasBerserk = false;
 };
@@ -64,4 +66,4 @@ struct GameState {
     int32_t timeLeftSeconds = 180;
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan
