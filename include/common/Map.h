@@ -7,7 +7,7 @@
 namespace DoomMan {
 class Map {
    private:
-    std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE> m_tiles;
+    std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE> m_tiles{};
 
    public:
     bool isBounds(Position p) const;

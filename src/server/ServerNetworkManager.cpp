@@ -68,9 +68,21 @@ void ServerNetworkManager::onReadyRead() {
                 emit joinRequested(m_clientToPlayerId[client], nick);
                 break;
             }
-        }
+            case PacketType::PlayerInput: {
+                PlayerInput input;
+                in >> input;
 
-        in.commitTransaction();
+                if (!in.commitTransaction()) {
+                    return;
+                }
+
+                emit inputReceived(m_clientToPlayerId[client], input);
+                break;
+            }
+            default:
+                in.abortTransaction();
+                return;
+        }
     }
 }
 
