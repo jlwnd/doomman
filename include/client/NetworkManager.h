@@ -21,4 +21,4 @@ class ClientNetworkManager : public QObject {
    private:
     QTcpSocket* m_socket;
 };
-} // namespace DoomMan
+}  // namespace DoomMan

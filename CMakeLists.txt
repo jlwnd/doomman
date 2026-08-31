@@ -13,6 +13,7 @@ include_directories(include)
 add_executable(DoomManServer 
     src/GameServer.cpp 
     src/server/MapLoader.cpp
+    src/server/Map.cpp
     src/server/GameEngine.cpp
     src/server/ServerNetworkManager.cpp
     src/server/Navigation.cpp
@@ -35,6 +36,8 @@ add_executable(DoomManServer
     include/common/Types.h
     include/common/Serialization.h
     include/common/Protocol.h
+    include/common/Tiles.h
+    include/common/Map.h
 )
 target_link_libraries(DoomManServer PRIVATE Qt6::Network Qt6::Core)
 
@@ -48,6 +51,7 @@ add_executable(DoomManClient
     src/server/GameServerHost.cpp
     src/server/GameEngine.cpp
     src/server/MapLoader.cpp
+    src/server/Map.cpp
     src/server/ServerNetworkManager.cpp 
     src/server/Navigation.cpp
     src/server/demons/Imp.cpp
@@ -66,6 +70,8 @@ add_executable(DoomManClient
     include/common/Types.h
     include/common/Serialization.h
     include/common/Protocol.h
+    include/common/Tiles.h
+    include/common/Map.h
 )
 target_link_libraries(DoomManClient PRIVATE Qt6::Widgets Qt6::Network)
 

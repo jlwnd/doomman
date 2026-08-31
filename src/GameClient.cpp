@@ -5,8 +5,8 @@
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
 
-    DoomMan::MainWindow mainWindow;
-    mainWindow.show();
+    DoomMan::MainWindow window;
+    window.show();
 
     return a.exec();
 }

@@ -18,7 +18,7 @@ std::optional<GameState> MapLoader::loadMap(const std::string& filePath) {
 
     while (std::getline(file, line) && row < BOARD_SIZE) {
         for (int col = 0; col < BOARD_SIZE && col < (int)line.length(); ++col) {
-            state.board[row][col] = charToTile(line[col]);
+            state.board.set({col, row}, charToTile(line[col]));
 
             if (line[col] == 'P') {
                 PlayerState player;
@@ -53,4 +53,4 @@ TileType MapLoader::charToTile(char c) {
     }
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

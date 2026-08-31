@@ -21,4 +21,4 @@ class GameWidget : public QWidget {
     GameState m_currentState;
     const int TILE_SIZE = 30;
 };
-} // namespace DoomMan
+}  // namespace DoomMan

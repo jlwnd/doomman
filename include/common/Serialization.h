@@ -3,6 +3,7 @@
 #include <QDataStream>
 
 #include "common/Types.h"
+
 namespace DoomMan {
 // Position
 inline QDataStream& operator<<(QDataStream& out, const Position& p) {
@@ -35,7 +36,7 @@ inline QDataStream& operator>>(QDataStream& in, DemonState& d) {
 inline QDataStream& operator<<(QDataStream& out, const GameState& g) {
     out << static_cast<uint8_t>(g.mode);
 
-    for (const auto& row : g.board) {
+    for (const auto& row : g.board.tiles()) {
         for (const auto& tile : row) {
             out << static_cast<uint8_t>(tile);
         }
@@ -59,11 +60,11 @@ inline QDataStream& operator>>(QDataStream& in, GameState& g) {
     in >> mode;
     g.mode = static_cast<GameMode>(mode);
 
-    for (auto& row : g.board) {
-        for (auto& tile : row) {
+    for (int y = 0; y < BOARD_SIZE; ++y) {
+        for (int x = 0; x < BOARD_SIZE; ++x) {
             uint8_t t;
             in >> t;
-            tile = static_cast<TileType>(t);
+            g.board.set({x, y}, static_cast<TileType>(t));
         }
     }
 

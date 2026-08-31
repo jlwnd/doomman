@@ -2,6 +2,7 @@
 
 #include <QDataStream>
 
+#include "common/Protocol.h"
 #include "common/Serialization.h"
 
 namespace DoomMan {
@@ -40,8 +41,8 @@ void ClientNetworkManager::sendInput(PlayerInput input) {
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_0);
 
-    out << input;
+    out << PacketType::PlayerInput << input;
     m_socket->write(block);
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan
