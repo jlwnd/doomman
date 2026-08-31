@@ -74,7 +74,7 @@ void GameEngine::movePlayer(PlayerState& player, int dx, int dy) {
     int newY = player.pos.y + dy;
 
     if (newX >= 0 && newX < BOARD_SIZE && newY >= 0 && newY < BOARD_SIZE) {
-        if (m_state.board[newY][newX] != TileType::Wall) {
+        if (!m_state.board.isWall({newX, newY})) {
             player.pos.x = newX;
             player.pos.y = newY;
             checkCollisions(player);
@@ -83,7 +83,7 @@ void GameEngine::movePlayer(PlayerState& player, int dx, int dy) {
 }
 
 void GameEngine::checkCollisions(PlayerState& player) {
-    auto& tile = m_state.board[player.pos.y][player.pos.x];
+    auto tile = m_state.board.at(player.pos);
 
     if (tile == TileType::Berserk) {
         player.hasBerserk = true;
@@ -93,10 +93,10 @@ void GameEngine::checkCollisions(PlayerState& player) {
                 demon->setFrightened(true);
             }
         }
-        tile = TileType::Empty;
+        m_state.board.set(player.pos, TileType::Empty);
     } else if (tile == TileType::Corridor) {
         player.score += 10;
-        tile = TileType::Empty;
+        m_state.board.set(player.pos, TileType::Empty);
     }
 }
 
@@ -135,7 +135,7 @@ void GameEngine::initDemons() {
 
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
-            switch (m_state.board[y][x]) {
+            switch (m_state.board.at({x, y})) {
                 case TileType::ImpSpawn:
                     m_spawners.emplace_back(DemonType::Imp, Position{x, y});
                     break;

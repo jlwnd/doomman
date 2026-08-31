@@ -21,7 +21,7 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
     int distToPlayer = Navigation::distanceBetween(m_pos, target.pos);
 
     if (distToPlayer <= AGGRO_RANGE) {
-        PlayerInput nextStep = Navigation::getNextMoveAStar(m_pos, target.pos, state.board);
+        PlayerInput nextStep = Navigation::getNextMoveAStar(m_pos, target.pos, state.board.tiles());
 
         int dx = 0, dy = 0;
         if (nextStep == PlayerInput::MoveUp)
@@ -33,14 +33,15 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
         else if (nextStep == PlayerInput::MoveRight)
             dx = 1;
 
-        if (state.board[m_pos.y + dy][m_pos.x + dx] != TileType::Wall) {
+        if (!state.board.isWall({m_pos.x + dx, m_pos.y + dy})) {
             m_pos.x += dx;
             m_pos.y += dy;
         }
     } else {
         int currentDistHome = Navigation::distanceBetween(m_pos, m_homeBase);
         if (currentDistHome > PATROL_RADIUS) {
-            PlayerInput nextStep = Navigation::getNextMoveAStar(m_pos, m_homeBase, state.board);
+            PlayerInput nextStep =
+                Navigation::getNextMoveAStar(m_pos, m_homeBase, state.board.tiles());
 
             int dx = 0, dy = 0;
             if (nextStep == PlayerInput::MoveUp)
@@ -52,7 +53,7 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
             else if (nextStep == PlayerInput::MoveRight)
                 dx = 1;
 
-            if (state.board[m_pos.y + dy][m_pos.x + dx] != TileType::Wall) {
+            if (!state.board.isWall({m_pos.x + dx, m_pos.y + dy})) {
                 m_pos.x += dx;
                 m_pos.y += dy;
             }
@@ -67,7 +68,7 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
                 Position p = allMoves[i];
 
                 if (p.x >= 0 && p.x < BOARD_SIZE && p.y >= 0 && p.y < BOARD_SIZE) {
-                    if (state.board[p.y][p.x] != TileType::Wall) {
+                    if (!state.board.isWall({p.x, p.y})) {
                         int distFromHome = Navigation::distanceBetween(p, m_homeBase);
                         if (distFromHome <= PATROL_RADIUS) {
                             legalMoves.push_back(p);
@@ -83,4 +84,4 @@ void LostSoul::move(int deltaMs, const GameState& state, const PlayerState& targ
         }
     }
 }
-} // namespace DoomMan
+}  // namespace DoomMan

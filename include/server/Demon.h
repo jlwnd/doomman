@@ -42,7 +42,7 @@ class Demon {
         for (int i = 0; i < allMoves.size(); ++i) {
             Position p = allMoves[i];
             if (p.x >= 0 && p.x < BOARD_SIZE && p.y >= 0 && p.y < BOARD_SIZE) {
-                if (state.board[p.y][p.x] != TileType::Wall) {
+                if (!state.board.isWall({p.x, p.y})) {
                     legalMoves.push_back(p);
                 }
             }
@@ -52,4 +52,4 @@ class Demon {
         }
     }
 };
-} // namespace DoomMan
+}  // namespace DoomMan

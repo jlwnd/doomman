@@ -17,7 +17,7 @@ void Imp::move(int deltaMs, const GameState& state, const PlayerState& target) {
         return;
     }
 
-    PlayerInput step = Navigation::getNextMoveAStar(m_pos, target.pos, state.board);
+    PlayerInput step = Navigation::getNextMoveAStar(m_pos, target.pos, state.board.tiles());
 
     int dx = 0;
     int dy = 0;
@@ -41,11 +41,10 @@ void Imp::move(int deltaMs, const GameState& state, const PlayerState& target) {
     const int newX = m_pos.x + dx;
     const int newY = m_pos.y + dy;
 
-    // @TODO - abstract out these checks into another function to improve reuasbility
     if (newX >= 0 && newX < BOARD_SIZE && newY >= 0 && newY < BOARD_SIZE &&
-        state.board[newY][newX] != TileType::Wall) {
+        !state.board.isWall({newX, newY})) {
         m_pos.x = newX;
         m_pos.y = newY;
     }
 }
-} // namespace DoomMan
+}  // namespace DoomMan

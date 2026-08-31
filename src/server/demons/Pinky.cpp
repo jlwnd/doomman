@@ -42,7 +42,7 @@ void Pinky::move(int deltaMs, const GameState& state, const PlayerState& target)
     finalTarget.x = std::clamp(finalTarget.x, 1, BOARD_SIZE - 2);
     finalTarget.y = std::clamp(finalTarget.y, 1, BOARD_SIZE - 2);
 
-    PlayerInput step = Navigation::getNextMoveAStar(m_pos, finalTarget, state.board);
+    PlayerInput step = Navigation::getNextMoveAStar(m_pos, finalTarget, state.board.tiles());
 
     int dx = 0, dy = 0;
     if (step == PlayerInput::MoveUp)
@@ -54,9 +54,9 @@ void Pinky::move(int deltaMs, const GameState& state, const PlayerState& target)
     else if (step == PlayerInput::MoveRight)
         dx = 1;
 
-    if (state.board[m_pos.y + dy][m_pos.x + dx] != TileType::Wall) {
+    if (!state.board.isWall({m_pos.x + dx, m_pos.y + dy})) {
         m_pos.x += dx;
         m_pos.y += dy;
     }
 }
-} // namespace DoomMan
+}  // namespace DoomMan

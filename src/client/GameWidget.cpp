@@ -23,7 +23,7 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         for (int x = 0; x < BOARD_SIZE; ++x) {
             QRect rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-            switch (m_currentState.board[y][x]) {
+            switch (m_currentState.board.at({x, y})) {
                 case TileType::Wall:
                     painter.fillRect(rect, Qt::black);
                     break;
