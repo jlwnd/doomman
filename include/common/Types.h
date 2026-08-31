@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include <QString>
+
 namespace DoomMan {
 
 inline constexpr int BOARD_SIZE = 21;

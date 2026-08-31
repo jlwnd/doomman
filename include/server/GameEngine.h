@@ -44,4 +44,4 @@ class GameEngine : public QObject {
     const int TICK_RATE_MS = 100;
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan

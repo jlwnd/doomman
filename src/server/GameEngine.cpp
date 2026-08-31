@@ -3,8 +3,6 @@
 #include <QDebug>
 #include <algorithm>
 
-#include "server/demons/DemonSpawner.h"
-
 namespace DoomMan {
 
 GameEngine::GameEngine(GameState& state, QObject* parent)
@@ -102,6 +100,36 @@ void GameEngine::checkCollisions(PlayerState& player) {
     }
 }
 
+void GameEngine::updateDemons() {
+    // Target the first living player (if any) for the demons to chase.
+    const PlayerState* target = nullptr;
+    for (const auto& p : m_state.players) {
+        if (p.isAlive) {
+            target = &p;
+            break;
+        }
+    }
+
+    for (size_t i = 0; i < m_spawners.size(); i++) {
+        auto& spawner = m_spawners[i];
+        spawner.update(TICK_RATE_MS);
+
+        auto* demon = spawner.getDemon();
+        if (demon && target) {
+            demon->move(TICK_RATE_MS, m_state, *target);
+        }
+
+        if (demon) {
+            m_state.demons[i].type = demon->getType();
+            m_state.demons[i].pos = demon->getPosition();
+            m_state.demons[i].isFrightened = demon->isFrightened();
+            m_state.demons[i].isAlive = true;
+        } else {
+            m_state.demons[i].isAlive = false;
+        }
+    }
+}
+
 void GameEngine::initDemons() {
     m_spawners.clear();
 
@@ -140,52 +168,4 @@ void GameEngine::initDemons() {
     }
 }
 
-void GameEngine::updateDemons() {
-    PlayerState* target = nullptr;
-    for (auto& p : m_state.players) {
-        if (p.isAlive) {
-            target = &p;
-            break;
-        }
-    }
-
-    if (!target) return;
-
-    for (size_t i = 0; i < m_spawners.size(); ++i) {
-        auto& spawner = m_spawners[i];
-        auto* demon = spawner.getDemon();
-
-        if (demon) {
-            demon->move(TICK_RATE_MS, m_state, *target);
-
-            m_state.demons[i].pos = demon->getPosition();
-            m_state.demons[i].isFrightened = demon->isFrightened();
-            m_state.demons[i].type = demon->getType();
-            m_state.demons[i].isAlive = true;
-
-            if (m_state.demons[i].pos == target->pos) {
-                if (m_state.demons[i].isFrightened) {
-                    target->score += 200;
-                    spawner.notifyDemonDeath();
-                    m_state.demons[i].isAlive = false;
-                } else {
-                    target->isAlive = false;
-                    qDebug() << "[GameEngine]: Slayer has been eliminated by a demon!";
-                }
-            }
-        } else {
-            spawner.update(TICK_RATE_MS);
-            demon = spawner.getDemon();
-            if (demon) {
-                m_state.demons[i].pos = demon->getPosition();
-                m_state.demons[i].type = demon->getType();
-                m_state.demons[i].isFrightened = demon->isFrightened();
-                m_state.demons[i].isAlive = true;
-            } else {
-                m_state.demons[i].isAlive = false;
-            }
-        }
-    }
-}
-
-} // namespace DoomMan
+}  // namespace DoomMan

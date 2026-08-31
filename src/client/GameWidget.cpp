@@ -100,4 +100,4 @@ void GameWidget::keyPressEvent(QKeyEvent* event) {
     }
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

@@ -15,4 +15,4 @@ class MapLoader {
     static TileType charToTile(char c);
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan

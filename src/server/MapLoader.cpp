@@ -53,4 +53,4 @@ TileType MapLoader::charToTile(char c) {
     }
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

@@ -3,6 +3,7 @@
 #include <QDataStream>
 
 #include "common/Types.h"
+
 namespace DoomMan {
 // Position
 inline QDataStream& operator<<(QDataStream& out, const Position& p) {

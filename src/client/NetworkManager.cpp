@@ -44,4 +44,4 @@ void ClientNetworkManager::sendInput(PlayerInput input) {
     m_socket->write(block);
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan
