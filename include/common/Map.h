@@ -1,5 +1,8 @@
 #pragma once
 
+/// @file
+/// @brief Reprezentacja planszy gry.
+
 #include <common/Grid.h>
 #include <common/Tiles.h>
 
