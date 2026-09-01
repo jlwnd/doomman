@@ -2,13 +2,13 @@
 
 #include <random>
 
-#include "server/Demon.h"
+#include "server/demons/DemonBase.h"
 
 namespace DoomMan {
-class LostSoul : public Demon {
+class LostSoul : public DemonBase {
    public:
     explicit LostSoul(DemonType type, Position startPos)
-        : Demon(type, startPos, 600), m_homeBase(startPos), m_gen(std::random_device{}()) {}
+        : DemonBase(type, startPos, 600), m_homeBase(startPos), m_gen(std::random_device{}()) {}
     void move(int deltaMs, const GameState& state, const PlayerState& target) override;
 
    private:
@@ -18,4 +18,4 @@ class LostSoul : public Demon {
     std::mt19937 m_gen;
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan

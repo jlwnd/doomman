@@ -25,4 +25,4 @@ class MainWindow : public QMainWindow {
     ClientNetworkManager* m_networkManager;
     std::unique_ptr<GameServerHost> m_localServer;
 };
-} // namespace DoomMan
+}  // namespace DoomMan

@@ -61,4 +61,4 @@ int Navigation::distanceBetween(const Position& start, const Position& currentPo
     return std::abs(start.x - currentPos.x) + std::abs(start.y - currentPos.y);
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

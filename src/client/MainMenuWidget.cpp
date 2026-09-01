@@ -107,4 +107,4 @@ void MainMenuWidget::onExitClicked() {
     emit sigExit();
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

@@ -1,11 +1,11 @@
 #pragma once
-#include "server/Demon.h"
+#include "server/demons/DemonBase.h"
 
 namespace DoomMan {
-class Pinky : public Demon {
+class Pinky : public DemonBase {
    public:
-    explicit Pinky(DemonType type, Position startPos) : Demon(type, startPos, 250) {}
+    explicit Pinky(DemonType type, Position startPos) : DemonBase(type, startPos, 250) {}
 
     void move(int deltaMs, const GameState& state, const PlayerState& target) override;
 };
-} // namespace DoomMan
+}  // namespace DoomMan

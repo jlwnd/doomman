@@ -17,6 +17,7 @@ add_executable(DoomManServer
     src/server/GameEngine.cpp
     src/server/ServerNetworkManager.cpp
     src/server/Navigation.cpp
+    src/server/demons/DemonBase.cpp
     src/server/demons/Imp.cpp
     src/server/demons/Pinky.cpp
     src/server/demons/Cacodemon.cpp
@@ -26,6 +27,7 @@ add_executable(DoomManServer
     include/server/GameEngine.h
     include/server/ServerNetworkManager.h
     include/server/Demon.h
+    include/server/demons/DemonBase.h
     include/server/demons/Imp.h
     include/server/demons/Pinky.h
     include/server/demons/Cacodemon.h
@@ -54,6 +56,7 @@ add_executable(DoomManClient
     src/server/Map.cpp
     src/server/ServerNetworkManager.cpp 
     src/server/Navigation.cpp
+    src/server/demons/DemonBase.cpp
     src/server/demons/Imp.cpp
     src/server/demons/Pinky.cpp
     src/server/demons/Cacodemon.cpp
