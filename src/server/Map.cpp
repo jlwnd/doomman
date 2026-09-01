@@ -2,22 +2,22 @@
 
 namespace DoomMan {
 bool Map::isBounds(Position p) const {
-    return p.x >= 0 && p.x < BOARD_SIZE && p.y >= 0 && p.y < BOARD_SIZE;
+    return m_tiles.inBounds(p.x, p.y);
 }
 
 bool Map::isWall(Position p) const {
-    return m_tiles[p.y][p.x] == TileType::Wall;
+    return m_tiles.at(p.x, p.y) == TileType::Wall;
 }
 
 TileType Map::at(Position p) const {
-    return m_tiles[p.y][p.x];
+    return m_tiles.at(p.x, p.y);
 }
 
 void Map::set(Position p, TileType t) {
-    m_tiles[p.y][p.x] = t;
+    m_tiles.at(p.x, p.y) = t;
 }
 
 const std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE>& Map::tiles() const {
-    return m_tiles;
+    return m_tiles.rows();
 }
 }  // namespace DoomMan
