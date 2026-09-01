@@ -1,6 +1,6 @@
 BUILD := build
 
-.PHONY: all configure build server client run-server run-client clean rebuild fmt
+.PHONY: all configure build server client run-server run-client clean rebuild fmt test
 
 all: build
 
@@ -29,3 +29,6 @@ clean:
 	rm -rf $(BUILD)
 
 rebuild: clean build
+
+test:
+	ctest --test-dir $(BUILD) --output-on-failure

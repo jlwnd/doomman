@@ -79,3 +79,7 @@ add_executable(DoomManClient
 target_link_libraries(DoomManClient PRIVATE Qt6::Widgets Qt6::Network)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+enable_testing()
+add_executable(test_grid tests/test_grid.cpp)
+add_test(NAME test_grid COMMAND test_grid)
