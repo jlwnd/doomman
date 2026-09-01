@@ -35,4 +35,8 @@ class Map {
     /// Zwraca wszystkie kafelki planszy do odczytu.
     /// @return Stała referencja do tablicy kafelków.
     const std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE>& tiles() const;
+
+   private:
+    Grid<TileType, BOARD_SIZE> m_tiles{};
+};
 }  // namespace DoomMan
