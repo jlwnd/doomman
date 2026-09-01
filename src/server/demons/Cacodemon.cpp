@@ -10,4 +10,4 @@ void Cacodemon::move(int deltaMs, const GameState& state, const PlayerState& tar
     // Always randomly move for cacodemon
     performRandomFlee(state);
 }
-} // namespace DoomMan
+}  // namespace DoomMan

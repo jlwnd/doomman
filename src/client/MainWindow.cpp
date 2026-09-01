@@ -60,4 +60,4 @@ void MainWindow::handleExit() {
     QApplication::quit();
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

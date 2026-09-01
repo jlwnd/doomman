@@ -23,4 +23,4 @@ class MainMenuWidget : public QWidget {
    private:
     QLineEdit* m_nickEdit;
 };
-} // namespace DoomMan
+}  // namespace DoomMan

@@ -34,4 +34,4 @@ class DemonSpawner {
     static constexpr int RESPAWN_DELAY_MS = 15000;
 };
 
-} // namespace DoomMan
+}  // namespace DoomMan

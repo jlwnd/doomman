@@ -49,4 +49,4 @@ Demon* DemonSpawner::getDemon() const {
     return m_demon.get();
 }
 
-} // namespace DoomMan
+}  // namespace DoomMan

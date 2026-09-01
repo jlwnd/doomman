@@ -28,4 +28,4 @@ class Navigation {
 
     static int distanceBetween(const Position& a, const Position& b);
 };
-} // namespace DoomMan
+}  // namespace DoomMan
