@@ -1,11 +1,9 @@
 #pragma once
 
-#include <QElapsedTimer>
 #include <QObject>
 #include <QTimer>
 
 #include "common/Types.h"
-#include "server/Demon.h"
 #include "server/demons/DemonSpawner.h"
 
 namespace DoomMan {
@@ -22,6 +20,12 @@ class GameEngine : public QObject {
 
     /// Uruchamia pętlę czasową rozgrywki.
     void start();
+
+    /// Posuwa symulację o zadany krok czasu: przetwarza logikę gry,
+    /// aktualizuje demony, odlicza czas i wykrywa kolizje.
+    /// Wołana z pętli czasowej (timer), z testu lub z pętli headless.
+    /// @param deltaMs Czas, jaki upłynął od poprzedniego kroku, w milisekundach.
+    void step(int deltaMs);
 
    public slots:
     /// Przetwarza kierunek ruchu odebrany od gracza.
@@ -45,12 +49,11 @@ class GameEngine : public QObject {
 
     GameState& m_state;
     QTimer* m_timer;
-    QElapsedTimer m_gameClock;
 
     std::vector<DemonSpawner> m_spawners;
 
     int m_berserkTimerMs = 0;
-    int m_initialTime;
+    int m_msAccumulator = 0;
     const int TICK_RATE_MS = 100;
 };
 

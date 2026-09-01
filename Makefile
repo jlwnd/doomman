@@ -7,7 +7,7 @@ all: build
 configure:
 	cmake -S . -B $(BUILD) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-build: configure
+build: configure generate-docs
 	cmake --build $(BUILD) -j
 
 server: configure

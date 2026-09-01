@@ -6,7 +6,7 @@
 namespace DoomMan {
 
 GameEngine::GameEngine(GameState& state, QObject* parent)
-    : QObject(parent), m_state(state), m_initialTime(state.timeLeftSeconds) {
+    : QObject(parent), m_state(state) {
     initDemons();
 
     m_timer = new QTimer(this);
@@ -14,17 +14,22 @@ GameEngine::GameEngine(GameState& state, QObject* parent)
 }
 
 void GameEngine::start() {
-    m_gameClock.start();
     m_timer->start(TICK_RATE_MS);
 }
 
 void GameEngine::tick() {
-    qint64 msPassed = m_gameClock.elapsed();
-    int secondsPassed = static_cast<int>(msPassed / 1000);
-    m_state.timeLeftSeconds = std::max(0, m_initialTime - secondsPassed);
+    step(TICK_RATE_MS);
+}
+
+void GameEngine::step(int deltaMs) {
+    m_msAccumulator += deltaMs;
+    while (m_msAccumulator >= 1000) {
+        m_msAccumulator -= 1000;
+        m_state.timeLeftSeconds = std::max(0, m_state.timeLeftSeconds - 1);
+    }
 
     if (m_berserkTimerMs > 0) {
-        m_berserkTimerMs -= TICK_RATE_MS;
+        m_berserkTimerMs -= deltaMs;
         if (m_berserkTimerMs <= 0) {
             m_berserkTimerMs = 0;
             for (auto& p : m_state.players) p.hasBerserk = false;
