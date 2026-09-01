@@ -7,10 +7,19 @@
 
 namespace DoomMan {
 
+/// Host serwera – spina silnik gry z warstwą sieciową w jedną całość.
 class GameServerHost : public QObject {
    public:
+    /// Uruchamia serwer nasłuchujący na zadanym porcie.
+    /// @param port Port TCP nasłuchu.
     void start(int port);
+
+    /// Zatrzymuje serwer i kończy rozgrywkę.
     void stop();
+
+    /// Obsługuje prośbę gracza o dołączenie do gry.
+    /// @param playerId Identyfikator gracza.
+    /// @param nick Pseudonim gracza.
     void handleJoinRequest(uint32_t playerId, const QString& nick);
 
    private slots:
