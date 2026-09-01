@@ -1,5 +1,8 @@
 #pragma once
 
+/// @file
+/// @brief Typy kafelków planszy oraz struktura współrzędnych.
+
 #include <compare>
 #include <cstdint>
 
