@@ -1,6 +1,6 @@
 BUILD := build
 
-.PHONY: all configure build server client run-server run-client clean rebuild fmt test
+.PHONY: all configure build server client run-server run-client clean rebuild fmt test generate-docs
 
 all: build
 
@@ -32,3 +32,7 @@ rebuild: clean build
 
 test:
 	ctest --test-dir $(BUILD) --output-on-failure
+
+generate-docs:
+	mkdir -p docs/doxygen
+	doxygen Doxyfile

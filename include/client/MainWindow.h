@@ -8,9 +8,13 @@
 #include "server/GameServerHost.h"
 
 namespace DoomMan {
+/// Główne okno aplikacji – zarządza przełączaniem ekranów
+/// (menu, gra) za pomocą QStackedWidget.
 class MainWindow : public QMainWindow {
     Q_OBJECT
    public:
+    /// Tworzy główne okno aplikacji.
+    /// @param parent Widżet-rodzic Qt.
     explicit MainWindow(QWidget* parent = nullptr);
 
    private slots:
