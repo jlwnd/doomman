@@ -1,5 +1,6 @@
 #pragma once
 
+#include <common/Grid.h>
 #include <common/Tiles.h>
 
 #include <array>
@@ -7,7 +8,7 @@
 namespace DoomMan {
 class Map {
    private:
-    std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE> m_tiles{};
+    Grid<TileType, BOARD_SIZE> m_tiles{};
 
    public:
     bool isBounds(Position p) const;
