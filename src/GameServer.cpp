@@ -3,6 +3,7 @@
 
 #include "common/Types.h"
 #include "server/GameEngine.h"
+#include "server/GameEngineDriver.h"
 #include "server/MapLoader.h"
 #include "server/ServerNetworkManager.h"
 
@@ -19,14 +20,14 @@ int main(int argc, char* argv[]) {
         game.players[0].id = 0;
     }
 
-    DoomMan::GameEngine engine(game);
+    DoomMan::GameEngineDriver engine(game);
     DoomMan::ServerNetworkManager network(666);  // Listening on port 666 >:)
 
-    QObject::connect(&engine, &DoomMan::GameEngine::gameStateUpdated,
+    QObject::connect(&engine, &DoomMan::GameEngineDriver::gameStateUpdated,
                      [&]() { network.broadcastState(game); });
 
     QObject::connect(&network, &DoomMan::ServerNetworkManager::inputReceived, &engine,
-                     &DoomMan::GameEngine::processInput);
+                     &DoomMan::GameEngineDriver::processInput);
 
     engine.start();
 

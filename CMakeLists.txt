@@ -15,6 +15,7 @@ add_executable(DoomManServer
     src/server/MapLoader.cpp
     src/server/Map.cpp
     src/server/GameEngine.cpp
+    src/server/GameEngineDriver.cpp
     src/server/ServerNetworkManager.cpp
     src/server/Navigation.cpp
     src/server/demons/DemonBase.cpp
@@ -25,6 +26,7 @@ add_executable(DoomManServer
     src/server/demons/DemonSpawner.cpp
     src/server/GameServerHost.cpp
     include/server/GameEngine.h
+    include/server/GameEngineDriver.h
     include/server/ServerNetworkManager.h
     include/server/Demon.h
     include/server/demons/DemonBase.h
@@ -51,6 +53,7 @@ add_executable(DoomManClient
     src/client/MainWindow.cpp
     src/client/MainMenuWidget.cpp
     src/server/GameServerHost.cpp
+    src/server/GameEngineDriver.cpp
     src/server/GameEngine.cpp
     src/server/MapLoader.cpp
     src/server/Map.cpp
@@ -69,6 +72,7 @@ add_executable(DoomManClient
     include/client/MainMenuWidget.h
     include/server/GameServerHost.h
     include/server/GameEngine.h
+    include/server/GameEngineDriver.h
     include/server/ServerNetworkManager.h
     include/common/Types.h
     include/common/Serialization.h

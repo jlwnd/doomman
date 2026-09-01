@@ -4,7 +4,7 @@
 #include <QDebug>
 
 #include "common/Types.h"
-#include "server/GameEngine.h"
+#include "server/GameEngineDriver.h"
 #include "server/MapLoader.h"
 #include "server/ServerNetworkManager.h"
 
@@ -18,13 +18,13 @@ void GameServerHost::start(int port) {
     }
 
     m_gameState = *loadedState;
-    m_engine = std::make_unique<GameEngine>(m_gameState);
+    m_engine = std::make_unique<GameEngineDriver>(m_gameState);
     m_networkManager = std::make_unique<ServerNetworkManager>(port);
 
     QObject::connect(m_networkManager.get(), &ServerNetworkManager::inputReceived, m_engine.get(),
-                     &GameEngine::processInput);
+                     &GameEngineDriver::processInput);
 
-    QObject::connect(m_engine.get(), &GameEngine::gameStateUpdated, this,
+    QObject::connect(m_engine.get(), &GameEngineDriver::gameStateUpdated, this,
                      &GameServerHost::onEngineUpdate);
     m_engine->start();
 }

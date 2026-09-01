@@ -5,20 +5,8 @@
 
 namespace DoomMan {
 
-GameEngine::GameEngine(GameState& state, QObject* parent)
-    : QObject(parent), m_state(state) {
+GameEngine::GameEngine(GameState& state) : m_state(state) {
     initDemons();
-
-    m_timer = new QTimer(this);
-    connect(m_timer, &QTimer::timeout, this, &GameEngine::tick);
-}
-
-void GameEngine::start() {
-    m_timer->start(TICK_RATE_MS);
-}
-
-void GameEngine::tick() {
-    step(TICK_RATE_MS);
 }
 
 void GameEngine::step(int deltaMs) {
@@ -40,8 +28,6 @@ void GameEngine::step(int deltaMs) {
     }
 
     updateDemons();
-
-    emit gameStateUpdated();
 }
 
 void GameEngine::processInput(uint32_t playerId, PlayerInput input) {

@@ -1,8 +1,5 @@
 #pragma once
 
-#include <QObject>
-#include <QTimer>
-
 #include "common/Types.h"
 #include "server/demons/DemonSpawner.h"
 
@@ -10,16 +7,11 @@ namespace DoomMan {
 
 /// Serce serwera – w pętli czasowej (tick) przetwarza logikę gry,
 /// wykrywa kolizje i zarządza czasem trwania bonusów.
-class GameEngine : public QObject {
-    Q_OBJECT
+class GameEngine {
    public:
     /// Tworzy silnik operujący na współdzielonym stanie gry.
     /// @param state Referencja do stanu gry aktualizowanego przez silnik.
-    /// @param parent Obiekt-rodzic Qt.
-    explicit GameEngine(GameState& state, QObject* parent = nullptr);
-
-    /// Uruchamia pętlę czasową rozgrywki.
-    void start();
+    explicit GameEngine(GameState& state);
 
     /// Posuwa symulację o zadany krok czasu: przetwarza logikę gry,
     /// aktualizuje demony, odlicza czas i wykrywa kolizje.
@@ -27,18 +19,11 @@ class GameEngine : public QObject {
     /// @param deltaMs Czas, jaki upłynął od poprzedniego kroku, w milisekundach.
     void step(int deltaMs);
 
-   public slots:
+   public:
     /// Przetwarza kierunek ruchu odebrany od gracza.
     /// @param playerId Identyfikator gracza.
     /// @param input Wciśnięty kierunek ruchu.
     void processInput(uint32_t playerId, PlayerInput input);
-
-   signals:
-    /// Emitowany po każdej aktualizacji stanu gry (do rozesłania klientom).
-    void gameStateUpdated();
-
-   private slots:
-    void tick();
 
    private:
     void movePlayer(PlayerState& player, int dx, int dy);
@@ -48,7 +33,6 @@ class GameEngine : public QObject {
     void updateDemons();
 
     GameState& m_state;
-    QTimer* m_timer;
 
     std::vector<DemonSpawner> m_spawners;
 
