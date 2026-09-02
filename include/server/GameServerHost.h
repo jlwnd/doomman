@@ -2,7 +2,7 @@
 #include <QCoreApplication>
 
 #include "common/Types.h"
-#include "server/GameEngine.h"
+#include "server/GameEngineDriver.h"
 #include "server/ServerNetworkManager.h"
 
 namespace DoomMan {
@@ -27,7 +27,7 @@ class GameServerHost : public QObject {
 
    private:
     GameState m_gameState;
-    std::unique_ptr<GameEngine> m_engine;
+    std::unique_ptr<GameEngineDriver> m_engine;
     std::unique_ptr<ServerNetworkManager> m_networkManager;
 };
 
