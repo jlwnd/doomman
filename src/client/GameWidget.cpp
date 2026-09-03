@@ -2,12 +2,38 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QString>
 
 namespace DoomMan {
+
+/// Indeksy tekstur w GameWidget::m_tex.
+enum Tex {
+    TEX_WALL,
+    TEX_FLOOR,
+    TEX_VOID,
+    TEX_GATE,
+    TEX_AMMO,
+    TEX_BERSERK,
+    TEX_PLAYER,
+    TEX_IMP,
+    TEX_PINKY,
+    TEX_CACO,
+    TEX_LOSTSOUL
+};
 
 GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
     setAttribute(Qt::WA_OpaquePaintEvent);
     setFocusPolicy(Qt::StrongFocus);
+
+    const char* names[] = {"wall",   "floor", "void",  "gate",      "ammo",    "berserk",
+                           "player", "imp",   "pinky", "cacodemon", "lostsoul"};
+    for (const char* name : names) {
+        m_tex.emplace_back().load(QString("assets/textures/%1.png").arg(name));
+    }
+}
+
+void GameWidget::drawTexture(QPainter& p, const QPixmap& tex, int px, int py) {
+    p.drawPixmap(QRect(px * TILE_SIZE, py * TILE_SIZE, TILE_SIZE, TILE_SIZE), tex);
 }
 
 void GameWidget::updateState(const GameState& state) {
@@ -18,64 +44,56 @@ void GameWidget::updateState(const GameState& state) {
 void GameWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
 
-    // Painting Map
     for (int y = 0; y < BOARD_SIZE; ++y) {
         for (int x = 0; x < BOARD_SIZE; ++x) {
-            QRect rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
             switch (m_currentState.board.at({x, y})) {
                 case TileType::Wall:
-                    painter.fillRect(rect, Qt::black);
+                    drawTexture(painter, m_tex[TEX_WALL], x, y);
+                    break;
+                case TileType::Empty:
+                    drawTexture(painter, m_tex[TEX_FLOOR], x, y);
                     break;
                 case TileType::Corridor:
-                    painter.fillRect(rect, Qt::darkGray);
+                    drawTexture(painter, m_tex[TEX_FLOOR], x, y);
+                    drawTexture(painter, m_tex[TEX_AMMO], x, y);
                     break;
                 case TileType::Berserk:
-                    painter.fillRect(rect, Qt::blue);
+                    drawTexture(painter, m_tex[TEX_FLOOR], x, y);
+                    drawTexture(painter, m_tex[TEX_BERSERK], x, y);
                     break;
                 default:
-                    painter.fillRect(rect, Qt::white);
+                    drawTexture(painter, m_tex[TEX_FLOOR], x, y);
                     break;
             }
         }
     }
 
-    // Painting Players
     for (const auto& player : m_currentState.players) {
-        painter.setBrush(Qt::green);
-        painter.drawEllipse(player.pos.x * TILE_SIZE, player.pos.y * TILE_SIZE, TILE_SIZE,
-                            TILE_SIZE);
+        drawTexture(painter, m_tex[TEX_PLAYER], player.pos.x, player.pos.y);
     }
 
-    // Painting Demons
     for (const auto& demon : m_currentState.demons) {
-        if (demon.isFrightened) {
-            painter.setBrush(Qt::cyan);
-        } else {
-            painter.setBrush(Qt::darkRed);
-        }
-
-        painter.drawEllipse(demon.pos.x * TILE_SIZE, demon.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-        painter.setPen(Qt::white);
-        QString label = "";
+        int tex = TEX_IMP;
         switch (demon.type) {
             case DemonType::Imp:
-                label = "I";
+                tex = TEX_IMP;
                 break;
             case DemonType::Pinky:
-                label = "P";
+                tex = TEX_PINKY;
                 break;
             case DemonType::Cacodemon:
-                label = "C";
+                tex = TEX_CACO;
                 break;
             case DemonType::LostSoul:
-                label = "L";
+                tex = TEX_LOSTSOUL;
                 break;
         }
-        painter.drawText(demon.pos.x * TILE_SIZE, demon.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
-                         Qt::AlignCenter, label);
-        painter.setPen(Qt::black);
+        drawTexture(painter, m_tex[tex], demon.pos.x, demon.pos.y);
+
+        if (demon.isFrightened) {
+            QRect r(demon.pos.x * TILE_SIZE, demon.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            painter.fillRect(r, QColor(40, 90, 220, 110));
+        }
     }
 }
 void GameWidget::keyPressEvent(QKeyEvent* event) {
