@@ -22,7 +22,7 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
     containerLayout->setSpacing(25);
     containerLayout->setContentsMargins(0, 50, 0, 50);
 
-    auto* titleLabel = new QLabel("DOOM", container);
+    auto* titleLabel = new QLabel("DOOMMAN", container);
     titleLabel->setObjectName("TitleLabel");
     titleLabel->setAlignment(Qt::AlignCenter);
 
