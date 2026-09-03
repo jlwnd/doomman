@@ -1,7 +1,10 @@
 #pragma once
 #include <QCoreApplication>
 
+#include <vector>
+
 #include "common/Types.h"
+#include "server/AiPlayer.h"
 #include "server/GameEngineDriver.h"
 #include "server/ServerNetworkManager.h"
 
@@ -26,9 +29,14 @@ class GameServerHost : public QObject {
     void onEngineUpdate();
 
    private:
+    /// Dodaje gracza sterowanego przez AI (dołącza jak zwykły gracz).
+    /// @param nick Pseudonim bota.
+    void spawnAiPlayer(const QString& nick);
+
     GameState m_gameState;
     std::unique_ptr<GameEngineDriver> m_engine;
     std::unique_ptr<ServerNetworkManager> m_networkManager;
+    std::vector<AiPlayer> m_aiPlayers;
 };
 
 }  // namespace DoomMan

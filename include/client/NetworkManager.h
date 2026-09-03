@@ -14,10 +14,11 @@ class ClientNetworkManager : public QObject {
     /// @param parent Obiekt-rodzic Qt.
     explicit ClientNetworkManager(QObject* parent = nullptr);
 
-    /// Łączy się z serwerem gry.
+    /// Łączy się z serwerem gry i po nawiązaniu połączenia zgłasza dołączenie.
     /// @param host Adres hosta serwera.
     /// @param port Port TCP serwera.
-    void connectToServer(const QString& host, quint16 port);
+    /// @param nick Pseudonim gracza wysyłany w prośbie o dołączenie.
+    void connectToServer(const QString& host, quint16 port, const QString& nick);
 
     /// Wysyła kierunek ruchu gracza do serwera.
     /// @param input Wciśnięty kierunek ruchu.
@@ -32,6 +33,10 @@ class ClientNetworkManager : public QObject {
     void onReadyRead();
 
    private:
+    /// Wysyła do serwera prośbę o dołączenie z zapamiętanym pseudonimem.
+    void sendJoin();
+
     QTcpSocket* m_socket;
+    QString m_nick;  ///< Pseudonim wysyłany przy dołączaniu do gry.
 };
 }  // namespace DoomMan

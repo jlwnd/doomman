@@ -46,14 +46,14 @@ void MainWindow::handleHostGame(const QString& nick) {
     }
 
     m_stackedWidget->setCurrentWidget(m_gameView);
-    m_networkManager->connectToServer("127.0.0.1", 666);
+    m_networkManager->connectToServer("127.0.0.1", 666, nick);
 }
 
 void MainWindow::handleJoinGame(const QString& nick) {
     qDebug() << "Join game clicked with nick:" << nick;
     // @TODO: Implement lobby/server joining
     m_stackedWidget->setCurrentWidget(m_gameView);
-    m_networkManager->connectToServer("127.0.0.1", 666);
+    m_networkManager->connectToServer("127.0.0.1", 666, nick);
 }
 
 void MainWindow::handleExit() {
