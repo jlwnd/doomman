@@ -24,7 +24,7 @@ ServerNetworkManager::~ServerNetworkManager() = default;
 void ServerNetworkManager::onNewConnection() {
     while (m_server->hasPendingConnections()) {
         QTcpSocket* client = m_server->nextPendingConnection();
-        uint32_t assignedId = m_nextPlayerId++;
+        uint32_t assignedId = allocatePlayerId();
         m_clientToPlayerId[client] = assignedId;
 
         connect(client, &QTcpSocket::disconnected, this,

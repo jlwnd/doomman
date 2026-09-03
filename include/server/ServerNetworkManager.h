@@ -22,6 +22,12 @@ class ServerNetworkManager : public QObject {
     /// Zamyka serwer i zwalnia zasoby połączeń.
     virtual ~ServerNetworkManager();
 
+    /// Rezerwuje kolejne unikalne id gracza – wspólne dla ludzi i botów.
+    /// @return Nowe, niepowtarzalne id gracza.
+    uint32_t allocatePlayerId() {
+        return m_nextPlayerId++;
+    }
+
    public slots:
     /// Rozsyła aktualny stan gry do wszystkich podłączonych klientów.
     /// @param state Stan gry do wysłania.
