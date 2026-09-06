@@ -11,8 +11,7 @@ ClientNetworkManager::ClientNetworkManager(QObject* parent)
     : QObject(parent), m_socket(new QTcpSocket(this)) {
     connect(m_socket, &QTcpSocket::readyRead, this, &ClientNetworkManager::onReadyRead);
 
-    connect(m_socket, &QTcpSocket::errorOccurred,
-            [](QAbstractSocket::SocketError error) { qCritical() << "Network Error:" << error; });
+    connect(m_socket, &QTcpSocket::errorOccurred, this, &ClientNetworkManager::onSocketError);
 
     connect(m_socket, &QTcpSocket::connected, this, &ClientNetworkManager::sendJoin);
 }
@@ -44,6 +43,10 @@ void ClientNetworkManager::onReadyRead() {
     if (in.commitTransaction()) {
         emit gameStateReceived(newState);
     }
+}
+
+void ClientNetworkManager::onSocketError(QAbstractSocket::SocketError error) {
+    qCritical() << "Network Error:" << error;
 }
 
 void ClientNetworkManager::sendInput(PlayerInput input) {

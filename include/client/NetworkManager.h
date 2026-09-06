@@ -37,6 +37,7 @@ class ClientNetworkManager : public QObject {
 
    private slots:
     void onReadyRead();
+    void onSocketError(QAbstractSocket::SocketError error);
 
    private:
     /// Wysyła do serwera prośbę o dołączenie z zapamiętanym pseudonimem.

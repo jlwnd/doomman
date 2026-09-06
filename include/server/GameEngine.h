@@ -38,6 +38,7 @@ class GameEngine {
     std::vector<DemonSpawner> m_spawners;
 
     int m_berserkTimerMs = 0;
+    int m_berserkChainCount = 0;
     int m_msAccumulator = 0;
 };
 

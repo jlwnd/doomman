@@ -5,9 +5,6 @@
 
 namespace DoomMan {
 
-constexpr uint32_t SCORE_PER_PELLET = 10;  ///< Punkty za zebranie amunicji.
-constexpr uint32_t SCORE_PER_DEMON = 200;  ///< Punkty za zabicie przerażonego demona.
-
 GameEngine::GameEngine(GameState& state) : m_state(state) {
     initDemons();
 }
@@ -23,6 +20,7 @@ void GameEngine::step(int deltaMs) {
         m_berserkTimerMs -= deltaMs;
         if (m_berserkTimerMs <= 0) {
             m_berserkTimerMs = 0;
+            m_berserkChainCount = 0;
             for (auto& p : m_state.players) p.hasBerserk = false;
             for (auto& spawner : m_spawners) {
                 if (auto* demon = spawner.getDemon()) demon->setFrightened(false);
@@ -41,7 +39,12 @@ void GameEngine::checkDemonCollisions() {
 
         for (auto& player : m_state.players) {
             if (player.isAlive && player.pos == demon->getPosition()) {
-                player.score += SCORE_PER_DEMON;
+                uint32_t reward = SCORE_PER_DEMON;
+                for (int j = 0; j < m_berserkChainCount; j++) {
+                    reward *= 2;
+                }
+                player.score += reward;
+                if (m_berserkChainCount < 3) m_berserkChainCount++;
                 m_spawners[i].notifyDemonDeath();
                 m_state.demons[i].isAlive = false;
                 break;
@@ -100,6 +103,7 @@ void GameEngine::checkCollisions(PlayerState& player) {
     if (tile == TileType::Berserk) {
         player.hasBerserk = true;
         m_berserkTimerMs = 10000;
+        m_berserkChainCount = 0;
         for (auto& spawner : m_spawners) {
             if (auto* demon = spawner.getDemon()) {
                 demon->setFrightened(true);
@@ -113,7 +117,6 @@ void GameEngine::checkCollisions(PlayerState& player) {
 }
 
 void GameEngine::updateDemons() {
-    // Target the first living player (if any) for the demons to chase.
     const PlayerState* target = nullptr;
     for (const auto& p : m_state.players) {
         if (p.isAlive) {

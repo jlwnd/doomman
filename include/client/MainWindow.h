@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow {
    private slots:
     void handleHostGame(const QString& nick);
     void handleJoinGame(const QString& nick);
+    void handleGameState(const GameState& state);
     void handleExit();
 
    private:

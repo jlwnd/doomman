@@ -48,17 +48,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
             &ClientNetworkManager::sendStart);
 
     connect(m_networkManager, &ClientNetworkManager::gameStateReceived, this,
-            [this](const GameState& state) {
-                for (const auto& p : state.players) {
-                    if (p.name == m_nick) {
-                        m_scoreLabel->setText(QString("Score: %1").arg(p.score));
-                        break;
-                    }
-                }
-                if (state.mode == GameMode::InGame) {
-                    m_stackedWidget->setCurrentWidget(m_gamePage);
-                }
-            });
+            &MainWindow::handleGameState);
 
     setWindowTitle("DoomMan");
     resize(672, 720);
@@ -92,6 +82,18 @@ void MainWindow::handleJoinGame(const QString& nick) {
     m_lobbyView->setHost(false);
     m_stackedWidget->setCurrentWidget(m_lobbyView);
     m_networkManager->connectToServer("127.0.0.1", 666, nick);
+}
+
+void MainWindow::handleGameState(const GameState& state) {
+    for (const auto& p : state.players) {
+        if (p.name == m_nick) {
+            m_scoreLabel->setText(QString("Score: %1").arg(p.score));
+            break;
+        }
+    }
+    if (state.mode == GameMode::InGame) {
+        m_stackedWidget->setCurrentWidget(m_gamePage);
+    }
 }
 
 void MainWindow::handleExit() {
