@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 void MainWindow::handleHostGame(const QString& nick) {
     qDebug() << "Host game clicked with nick:" << nick;
     m_nick = nick;
+    m_model.setLocalNick(nick);
 
     m_localServer = std::make_unique<GameServerHost>();
 
@@ -87,26 +88,24 @@ void MainWindow::handleJoinGame(const QString& nick, const QString& host) {
     }
     qDebug() << "Join game clicked with nick:" << nick << "host:" << host;
     m_nick = nick;
+    m_model.setLocalNick(nick);
     m_lobbyView->setHost(false);
     m_stackedWidget->setCurrentWidget(m_lobbyView);
     m_networkManager->connectToServer(host.trimmed(), 666, nick);
 }
 
 void MainWindow::handleGameState(const GameState& state) {
-    for (const auto& p : state.players) {
-        if (p.name == m_nick) {
-            m_scoreLabel->setText(QString("Wynik: %1").arg(p.score));
-            if (!p.isAlive && !m_gameOverShown) {
-                m_gameOverShown = true;
-                m_gameOverView->showScores(state);
-                m_stackedWidget->setCurrentWidget(m_gameOverView);
-            }
-            break;
-        }
+    m_model.update(state);
+    m_scoreLabel->setText(QString("Wynik: %1").arg(m_model.localScore()));
+
+    if (m_model.isLocalPlayerDead() && !m_gameOverShown) {
+        m_gameOverShown = true;
+        m_gameOverView->showScores(m_model.leaderboard());
+        m_stackedWidget->setCurrentWidget(m_gameOverView);
     }
     if (m_gameOverShown) return;
 
-    if (state.mode == GameMode::InGame) {
+    if (m_model.isInGame()) {
         m_stackedWidget->setCurrentWidget(m_gamePage);
     }
 }

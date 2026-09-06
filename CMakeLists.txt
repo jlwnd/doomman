@@ -14,6 +14,8 @@ add_executable(DoomManClient
     src/GameClient.cpp
     src/client/NetworkManager.cpp
     src/client/MainWindow.cpp
+    src/client/ClientGameModel.cpp
+    src/client/Leaderboard.cpp
     src/client/Theme.cpp
     src/client/widgets/GameWidget.cpp
     src/client/widgets/MainMenuWidget.cpp
@@ -36,6 +38,8 @@ add_executable(DoomManClient
 
     include/client/NetworkManager.h
     include/client/MainWindow.h
+    include/client/ClientGameModel.h
+    include/client/Leaderboard.h
     include/client/widgets/GameWidget.h
     include/client/widgets/MainMenuWidget.h
     include/client/widgets/LobbyWidget.h
