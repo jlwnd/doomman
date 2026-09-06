@@ -13,7 +13,7 @@ LobbyWidget::LobbyWidget(QWidget* parent) : QWidget(parent) {
 
     auto* container = new QFrame(this);
     container->setObjectName("LobbyContainer");
-    container->setFixedSize(500, 400);
+    container->setFixedSize(520, 560);
 
     auto* containerLayout = new QVBoxLayout(container);
     containerLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
@@ -32,6 +32,10 @@ LobbyWidget::LobbyWidget(QWidget* parent) : QWidget(parent) {
     auto* btnReady = new QPushButton("GOTOWY", container);
     btnReady->setObjectName("LobbyButton");
 
+    m_addBotButton = new QPushButton("DODAJ BOTA", container);
+    m_addBotButton->setObjectName("LobbyButton");
+    m_addBotButton->setEnabled(false);
+
     m_startButton = new QPushButton("START", container);
     m_startButton->setObjectName("LobbyButton");
     m_startButton->setEnabled(false);
@@ -39,51 +43,19 @@ LobbyWidget::LobbyWidget(QWidget* parent) : QWidget(parent) {
     containerLayout->addWidget(titleLabel);
     containerLayout->addWidget(m_playerList);
     containerLayout->addWidget(btnReady, 0, Qt::AlignHCenter);
+    containerLayout->addWidget(m_addBotButton, 0, Qt::AlignHCenter);
     containerLayout->addWidget(m_startButton, 0, Qt::AlignHCenter);
 
     lobbyLayout->addWidget(container);
 
-    setStyleSheet(R"(
-        #LobbyContainer {
-            background-color: #0b0c10;
-            border: 2px solid #29b6f6;
-            border-radius: 15px;
-        }
-        #TitleLabel {
-            color: #ef5350;
-            font-size: 48px;
-            font-weight: bold;
-            font-family: "Courier New", monospace;
-        }
-        #PlayerList {
-            color: #ef5350;
-            font-size: 18px;
-            font-family: "Courier New", monospace;
-            background: transparent;
-            border: none;
-        }
-        #LobbyButton {
-            color: #ef5350;
-            font-size: 20px;
-            font-family: "Courier New", monospace;
-            background-color: transparent;
-            border: none;
-            padding: 5px;
-        }
-        #LobbyButton:hover:enabled {
-            color: #ffffff;
-        }
-        #LobbyButton:disabled {
-            color: #4a4a4a;
-        }
-    )");
-
     connect(btnReady, &QPushButton::clicked, this, &LobbyWidget::sigGameReady);
     connect(m_startButton, &QPushButton::clicked, this, &LobbyWidget::sigGameStart);
+    connect(m_addBotButton, &QPushButton::clicked, this, &LobbyWidget::sigAddBot);
 }
 
 void LobbyWidget::setHost(bool isHost) {
     m_startButton->setEnabled(isHost);
+    m_addBotButton->setEnabled(isHost);
 }
 
 void LobbyWidget::updateLobby(const GameState& state) {

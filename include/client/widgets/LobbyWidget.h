@@ -31,8 +31,12 @@ class LobbyWidget : public QWidget {
     // Emitowany gdy host kliknie przycisk startu rozgrywki.
     void sigGameStart();
 
+    // Emitowany gdy host kliknie przycisk dodania bota.
+    void sigAddBot();
+
    private:
     QListWidget* m_playerList;
     QPushButton* m_startButton;
+    QPushButton* m_addBotButton;
 };
 }  // namespace DoomMan

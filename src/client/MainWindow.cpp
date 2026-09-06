@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_networkManager = new ClientNetworkManager(this);
 
     m_gamePage = new QWidget(this);
-    m_scoreLabel = new QLabel("Score: 0", m_gamePage);
-    m_scoreLabel->setStyleSheet("color: white; font-size: 20px; font-weight: bold; padding: 6px;");
+    m_scoreLabel = new QLabel("Wynik: 0", m_gamePage);
+    m_scoreLabel->setObjectName("ScoreLabel");
     auto* gameLayout = new QVBoxLayout(m_gamePage);
     gameLayout->setContentsMargins(0, 0, 0, 0);
     gameLayout->setSpacing(0);
@@ -50,14 +50,14 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
             &ClientNetworkManager::sendReady);
     connect(m_lobbyView, &LobbyWidget::sigGameStart, m_networkManager,
             &ClientNetworkManager::sendStart);
+    connect(m_lobbyView, &LobbyWidget::sigAddBot, m_networkManager,
+            &ClientNetworkManager::sendAddBot);
 
     connect(m_networkManager, &ClientNetworkManager::gameStateReceived, this,
             &MainWindow::handleGameState);
 
     setWindowTitle("DoomMan");
     resize(672, 720);
-
-    setStyleSheet("QMainWindow { background-color: #0b0c10; }");
 
     m_stackedWidget->setCurrentWidget(m_mainMenu);
 }
@@ -80,18 +80,22 @@ void MainWindow::handleHostGame(const QString& nick) {
     m_networkManager->connectToServer("127.0.0.1", 666, nick);
 }
 
-void MainWindow::handleJoinGame(const QString& nick) {
-    qDebug() << "Join game clicked with nick:" << nick;
+void MainWindow::handleJoinGame(const QString& nick, const QString& host) {
+    if (host.trimmed().isEmpty()) {
+        qWarning() << "Join aborted: empty host address";
+        return;
+    }
+    qDebug() << "Join game clicked with nick:" << nick << "host:" << host;
     m_nick = nick;
     m_lobbyView->setHost(false);
     m_stackedWidget->setCurrentWidget(m_lobbyView);
-    m_networkManager->connectToServer("127.0.0.1", 666, nick);
+    m_networkManager->connectToServer(host.trimmed(), 666, nick);
 }
 
 void MainWindow::handleGameState(const GameState& state) {
     for (const auto& p : state.players) {
         if (p.name == m_nick) {
-            m_scoreLabel->setText(QString("Score: %1").arg(p.score));
+            m_scoreLabel->setText(QString("Wynik: %1").arg(p.score));
             if (!p.isAlive && !m_gameOverShown) {
                 m_gameOverShown = true;
                 m_gameOverView->showScores(state);

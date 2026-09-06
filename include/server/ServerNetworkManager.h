@@ -51,6 +51,9 @@ class ServerNetworkManager : public QObject {
     /// Emitowany po żądaniu rozpoczęcia rundy przez hosta.
     void startRequested();
 
+    /// Emitowany po żądaniu dodania gracza AI przez hosta.
+    void addBotRequested();
+
    private slots:
     void onNewConnection();
     void onClientDisconnected();

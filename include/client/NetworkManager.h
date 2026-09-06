@@ -30,6 +30,9 @@ class ClientNetworkManager : public QObject {
     /// Zgłasza serwerowi rozpoczęcie rundy (tylko host).
     void sendStart();
 
+    /// Prosi serwer o dodanie gracza AI do lobby (tylko host).
+    void sendAddBot();
+
    signals:
     /// Emitowany po odebraniu i zdeserializowaniu stanu gry z serwera.
     /// @param state Odebrany stan gry.

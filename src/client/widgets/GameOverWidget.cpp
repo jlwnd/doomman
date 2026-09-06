@@ -15,7 +15,7 @@ GameOverWidget::GameOverWidget(QWidget* parent) : QWidget(parent) {
 
     auto* container = new QFrame(this);
     container->setObjectName("GameOverContainer");
-    container->setFixedSize(500, 400);
+    container->setFixedSize(520, 560);
 
     auto* containerLayout = new QVBoxLayout(container);
     containerLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
@@ -39,38 +39,6 @@ GameOverWidget::GameOverWidget(QWidget* parent) : QWidget(parent) {
     containerLayout->addWidget(exitButton, 0, Qt::AlignHCenter);
 
     outerLayout->addWidget(container);
-
-    setStyleSheet(R"(
-        #GameOverContainer {
-            background-color: #0b0c10;
-            border: 2px solid #29b6f6;
-            border-radius: 15px;
-        }
-        #TitleLabel {
-            color: #ef5350;
-            font-size: 48px;
-            font-weight: bold;
-            font-family: "Courier New", monospace;
-        }
-        #ScoreList {
-            color: #ef5350;
-            font-size: 18px;
-            font-family: "Courier New", monospace;
-            background: transparent;
-            border: none;
-        }
-        #GameOverButton {
-            color: #ef5350;
-            font-size: 20px;
-            font-family: "Courier New", monospace;
-            background-color: transparent;
-            border: none;
-            padding: 5px;
-        }
-        #GameOverButton:hover {
-            color: #ffffff;
-        }
-    )");
 
     connect(exitButton, &QPushButton::clicked, this, &GameOverWidget::sigExit);
 }

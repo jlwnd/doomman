@@ -15,7 +15,7 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
 
     auto* container = new QFrame(this);
     container->setObjectName("MenuContainer");
-    container->setFixedSize(500, 400);
+    container->setFixedSize(520, 560);
 
     auto* containerLayout = new QVBoxLayout(container);
     containerLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
@@ -32,10 +32,21 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
     nickLabel->setObjectName("NickLabel");
     m_nickEdit = new QLineEdit(container);
     m_nickEdit->setObjectName("NickEdit");
-    m_nickEdit->setFixedWidth(150);
+    m_nickEdit->setFixedWidth(200);
 
     nickLayout->addWidget(nickLabel);
     nickLayout->addWidget(m_nickEdit);
+
+    auto* hostLayout = new QHBoxLayout();
+    hostLayout->setAlignment(Qt::AlignCenter);
+    auto* hostLabel = new QLabel("IP HOSTA:", container);
+    hostLabel->setObjectName("NickLabel");
+    m_hostEdit = new QLineEdit("127.0.0.1", container);
+    m_hostEdit->setObjectName("NickEdit");
+    m_hostEdit->setFixedWidth(200);
+
+    hostLayout->addWidget(hostLabel);
+    hostLayout->addWidget(m_hostEdit);
 
     auto* btnHost = new QPushButton("HOST GRY", container);
     auto* btnJoin = new QPushButton("DOŁĄCZ DO GRY", container);
@@ -47,47 +58,13 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
 
     containerLayout->addWidget(titleLabel);
     containerLayout->addLayout(nickLayout);
+    containerLayout->addLayout(hostLayout);
     containerLayout->addSpacing(20);
     containerLayout->addWidget(btnHost, 0, Qt::AlignHCenter);
     containerLayout->addWidget(btnJoin, 0, Qt::AlignHCenter);
     containerLayout->addWidget(btnExit, 0, Qt::AlignHCenter);
 
     mainLayout->addWidget(container);
-
-    setStyleSheet(R"(
-        #MenuContainer {
-            background-color: #0b0c10;
-            border: 2px solid #29b6f6;
-            border-radius: 15px;
-        }
-        #TitleLabel {
-            color: #ef5350;
-            font-size: 48px;
-            font-weight: bold;
-            font-family: "Courier New", monospace;
-        }
-        #NickLabel, #NickEdit {
-            color: #ef5350;
-            font-size: 20px;
-            font-family: "Courier New", monospace;
-            background: transparent;
-            border: none;
-        }
-        #NickEdit {
-            border-bottom: 2px dashed #ef5350;
-        }
-        #MenuButton {
-            color: #ef5350;
-            font-size: 20px;
-            font-family: "Courier New", monospace;
-            background-color: transparent;
-            border: none;
-            padding: 5px;
-        }
-        #MenuButton:hover {
-            color: #ffffff;
-        }
-    )");
 
     connect(btnHost, &QPushButton::clicked, this, &MainMenuWidget::onHostClicked);
     connect(btnJoin, &QPushButton::clicked, this, &MainMenuWidget::onJoinClicked);
@@ -99,7 +76,7 @@ void MainMenuWidget::onHostClicked() {
 }
 
 void MainMenuWidget::onJoinClicked() {
-    emit sigJoinGame(m_nickEdit->text());
+    emit sigJoinGame(m_nickEdit->text(), m_hostEdit->text());
 }
 
 void MainMenuWidget::onExitClicked() {

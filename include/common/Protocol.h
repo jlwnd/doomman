@@ -16,7 +16,7 @@ enum class PacketType : uint8_t {
     GameStart = 3,      ///< Rozpoczęcie rundy.
     PlayerInput = 4,    ///< Wciśnięty przez gracza kierunek ruchu.
     GameStateSync = 5,  ///< Synchronizacja pełnego stanu gry.
-    ChatMessage = 6     ///< Wiadomość czatu.
+    AddBot = 6          ///< Prośba hosta o dodanie gracza AI.
 };
 
 /// Nagłówek pakietu sieciowego określający jego typ.
