@@ -2,14 +2,15 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
-#include "client/GameWidget.h"
-#include "client/MainMenuWidget.h"
 #include "client/NetworkManager.h"
+#include "client/widgets/GameWidget.h"
+#include "client/widgets/LobbyWidget.h"
+#include "client/widgets/MainMenuWidget.h"
 #include "server/GameServerHost.h"
 
 namespace DoomMan {
 /// Główne okno aplikacji – zarządza przełączaniem ekranów
-/// (menu, gra) za pomocą QStackedWidget.
+/// (menu, gra, lobby) za pomocą QStackedWidget.
 class MainWindow : public QMainWindow {
     Q_OBJECT
    public:
@@ -26,6 +27,8 @@ class MainWindow : public QMainWindow {
     QStackedWidget* m_stackedWidget;
     MainMenuWidget* m_mainMenu;
     GameWidget* m_gameView;
+    LobbyWidget* m_lobbyView;
+
     ClientNetworkManager* m_networkManager;
     std::unique_ptr<GameServerHost> m_localServer;
 };

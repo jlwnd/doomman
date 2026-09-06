@@ -1,4 +1,4 @@
-#include "client/GameWidget.h"
+#include "client/widgets/GameWidget.h"
 
 #include <QPaintEvent>
 #include <QPainter>

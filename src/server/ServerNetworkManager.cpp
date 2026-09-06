@@ -79,6 +79,22 @@ void ServerNetworkManager::onReadyRead() {
                 emit inputReceived(m_clientToPlayerId[client], input);
                 break;
             }
+            case PacketType::PlayerReady: {
+                if (!in.commitTransaction()) {
+                    return;
+                }
+
+                emit readyToggled(m_clientToPlayerId[client]);
+                break;
+            }
+            case PacketType::GameStart: {
+                if (!in.commitTransaction()) {
+                    return;
+                }
+
+                emit startRequested();
+                break;
+            }
             default:
                 in.abortTransaction();
                 return;

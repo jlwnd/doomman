@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QDebug>
 
+#include "client/widgets/LobbyWidget.h"
+
 namespace DoomMan {
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
@@ -11,10 +13,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     m_mainMenu = new MainMenuWidget(this);
     m_gameView = new GameWidget(this);
+    m_lobbyView = new LobbyWidget(this);
     m_networkManager = new ClientNetworkManager(this);
 
     m_stackedWidget->addWidget(m_mainMenu);
     m_stackedWidget->addWidget(m_gameView);
+    m_stackedWidget->addWidget(m_lobbyView);
 
     connect(m_mainMenu, &MainMenuWidget::sigHostGame, this, &MainWindow::handleHostGame);
     connect(m_mainMenu, &MainMenuWidget::sigJoinGame, this, &MainWindow::handleJoinGame);
@@ -24,6 +28,20 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
             &GameWidget::updateState);
     connect(m_gameView, &GameWidget::inputDetected, m_networkManager,
             &ClientNetworkManager::sendInput);
+
+    connect(m_networkManager, &ClientNetworkManager::gameStateReceived, m_lobbyView,
+            &LobbyWidget::updateLobby);
+    connect(m_lobbyView, &LobbyWidget::sigGameReady, m_networkManager,
+            &ClientNetworkManager::sendReady);
+    connect(m_lobbyView, &LobbyWidget::sigGameStart, m_networkManager,
+            &ClientNetworkManager::sendStart);
+
+    connect(m_networkManager, &ClientNetworkManager::gameStateReceived, this,
+            [this](const GameState& state) {
+        if (state.mode == GameMode::InGame) {
+            m_stackedWidget->setCurrentWidget(m_gameView);
+        }
+    });
 
     setWindowTitle("DoomMan");
     resize(640, 640);
@@ -45,14 +63,15 @@ void MainWindow::handleHostGame(const QString& nick) {
         return;
     }
 
-    m_stackedWidget->setCurrentWidget(m_gameView);
+    m_lobbyView->setHost(true);
+    m_stackedWidget->setCurrentWidget(m_lobbyView);
     m_networkManager->connectToServer("127.0.0.1", 666, nick);
 }
 
 void MainWindow::handleJoinGame(const QString& nick) {
     qDebug() << "Join game clicked with nick:" << nick;
-    // @TODO: Implement lobby/server joining
-    m_stackedWidget->setCurrentWidget(m_gameView);
+    m_lobbyView->setHost(false);
+    m_stackedWidget->setCurrentWidget(m_lobbyView);
     m_networkManager->connectToServer("127.0.0.1", 666, nick);
 }
 
