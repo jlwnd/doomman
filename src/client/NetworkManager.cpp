@@ -82,4 +82,15 @@ void ClientNetworkManager::sendStart() {
     m_socket->write(block);
 }
 
+void ClientNetworkManager::sendAddBot() {
+    if (m_socket->state() != QAbstractSocket::ConnectedState) return;
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_0);
+
+    out << PacketType::AddBot;
+    m_socket->write(block);
+}
+
 }  // namespace DoomMan

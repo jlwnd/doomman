@@ -95,6 +95,14 @@ void ServerNetworkManager::onReadyRead() {
                 emit startRequested();
                 break;
             }
+            case PacketType::AddBot: {
+                if (!in.commitTransaction()) {
+                    return;
+                }
+
+                emit addBotRequested();
+                break;
+            }
             default:
                 in.abortTransaction();
                 return;

@@ -34,10 +34,16 @@ void GameServerHost::start(int port) {
     QObject::connect(m_networkManager.get(), &ServerNetworkManager::startRequested, this,
                      &GameServerHost::handleGameStart);
 
+    QObject::connect(m_networkManager.get(), &ServerNetworkManager::addBotRequested, this,
+                     &GameServerHost::handleAddBot);
+
     QObject::connect(m_engine.get(), &GameEngineDriver::gameStateUpdated, this,
                      &GameServerHost::onEngineUpdate);
+}
 
-    spawnAiPlayer("BOT");  // @Todo: remove the bot
+void GameServerHost::handleAddBot() {
+    if (m_gameState.mode != GameMode::Lobby) return;
+    spawnAiPlayer(QString("BOT %1").arg(m_aiPlayers.size() + 1));
 }
 
 void GameServerHost::spawnAiPlayer(const QString& nick) {

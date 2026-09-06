@@ -37,6 +37,17 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
     nickLayout->addWidget(nickLabel);
     nickLayout->addWidget(m_nickEdit);
 
+    auto* hostLayout = new QHBoxLayout();
+    hostLayout->setAlignment(Qt::AlignCenter);
+    auto* hostLabel = new QLabel("IP HOSTA:", container);
+    hostLabel->setObjectName("NickLabel");
+    m_hostEdit = new QLineEdit("127.0.0.1", container);
+    m_hostEdit->setObjectName("NickEdit");
+    m_hostEdit->setFixedWidth(150);
+
+    hostLayout->addWidget(hostLabel);
+    hostLayout->addWidget(m_hostEdit);
+
     auto* btnHost = new QPushButton("HOST GRY", container);
     auto* btnJoin = new QPushButton("DOŁĄCZ DO GRY", container);
     auto* btnExit = new QPushButton("WYJŚCIE", container);
@@ -47,6 +58,7 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
 
     containerLayout->addWidget(titleLabel);
     containerLayout->addLayout(nickLayout);
+    containerLayout->addLayout(hostLayout);
     containerLayout->addSpacing(20);
     containerLayout->addWidget(btnHost, 0, Qt::AlignHCenter);
     containerLayout->addWidget(btnJoin, 0, Qt::AlignHCenter);
@@ -99,7 +111,7 @@ void MainMenuWidget::onHostClicked() {
 }
 
 void MainMenuWidget::onJoinClicked() {
-    emit sigJoinGame(m_nickEdit->text());
+    emit sigJoinGame(m_nickEdit->text(), m_hostEdit->text());
 }
 
 void MainMenuWidget::onExitClicked() {

@@ -31,6 +31,9 @@ class GameServerHost : public QObject {
     /// Rozpoczyna rundę (ustawia tryb InGame) i rozsyła nowy stan.
     void handleGameStart();
 
+    /// Dodaje do lobby gracza sterowanego przez AI na żądanie hosta.
+    void handleAddBot();
+
    private slots:
     void onEngineUpdate();
 

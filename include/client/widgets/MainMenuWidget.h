@@ -20,7 +20,8 @@ class MainMenuWidget : public QWidget {
 
     /// Emitowany po wybraniu dołączenia do gry.
     /// @param nick Pseudonim dołączającego gracza.
-    void sigJoinGame(const QString& nick);
+    /// @param host Adres IP hosta, do którego dołączamy.
+    void sigJoinGame(const QString& nick, const QString& host);
 
     /// Emitowany po wybraniu wyjścia z programu.
     void sigExit();
@@ -32,5 +33,6 @@ class MainMenuWidget : public QWidget {
 
    private:
     QLineEdit* m_nickEdit;
+    QLineEdit* m_hostEdit;
 };
 }  // namespace DoomMan
