@@ -13,7 +13,7 @@ LobbyWidget::LobbyWidget(QWidget* parent) : QWidget(parent) {
 
     auto* container = new QFrame(this);
     container->setObjectName("LobbyContainer");
-    container->setFixedSize(500, 400);
+    container->setFixedSize(520, 560);
 
     auto* containerLayout = new QVBoxLayout(container);
     containerLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
@@ -47,41 +47,6 @@ LobbyWidget::LobbyWidget(QWidget* parent) : QWidget(parent) {
     containerLayout->addWidget(m_startButton, 0, Qt::AlignHCenter);
 
     lobbyLayout->addWidget(container);
-
-    setStyleSheet(R"(
-        #LobbyContainer {
-            background-color: #0b0c10;
-            border: 2px solid #29b6f6;
-            border-radius: 15px;
-        }
-        #TitleLabel {
-            color: #ef5350;
-            font-size: 48px;
-            font-weight: bold;
-            font-family: "Courier New", monospace;
-        }
-        #PlayerList {
-            color: #ef5350;
-            font-size: 18px;
-            font-family: "Courier New", monospace;
-            background: transparent;
-            border: none;
-        }
-        #LobbyButton {
-            color: #ef5350;
-            font-size: 20px;
-            font-family: "Courier New", monospace;
-            background-color: transparent;
-            border: none;
-            padding: 5px;
-        }
-        #LobbyButton:hover:enabled {
-            color: #ffffff;
-        }
-        #LobbyButton:disabled {
-            color: #4a4a4a;
-        }
-    )");
 
     connect(btnReady, &QPushButton::clicked, this, &LobbyWidget::sigGameReady);
     connect(m_startButton, &QPushButton::clicked, this, &LobbyWidget::sigGameStart);

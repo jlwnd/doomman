@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     m_gamePage = new QWidget(this);
     m_scoreLabel = new QLabel("Wynik: 0", m_gamePage);
-    m_scoreLabel->setStyleSheet("color: white; font-size: 20px; font-weight: bold; padding: 6px;");
+    m_scoreLabel->setObjectName("ScoreLabel");
     auto* gameLayout = new QVBoxLayout(m_gamePage);
     gameLayout->setContentsMargins(0, 0, 0, 0);
     gameLayout->setSpacing(0);
@@ -58,8 +58,6 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     setWindowTitle("DoomMan");
     resize(672, 720);
-
-    setStyleSheet("QMainWindow { background-color: #0b0c10; }");
 
     m_stackedWidget->setCurrentWidget(m_mainMenu);
 }
