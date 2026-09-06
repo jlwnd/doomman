@@ -11,14 +11,10 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     QCoreApplication a(argc, argv);
 
-    auto loadedState = DoomMan::MapLoader::loadMap("assets/levels/level1.txt");
-    if (!loadedState) return 1;
+    auto loadedLevel = DoomMan::MapLoader::loadMap("assets/levels/level1.txt");
+    if (!loadedLevel) return 1;
 
-    DoomMan::GameState game = *loadedState;
-
-    if (!game.players.empty()) {
-        game.players[0].id = 0;
-    }
+    DoomMan::GameState game = loadedLevel->state;
 
     DoomMan::GameEngineDriver engine(game);
     DoomMan::ServerNetworkManager network(666);  // Listening on port 666 >:)

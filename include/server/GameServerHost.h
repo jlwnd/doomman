@@ -1,6 +1,5 @@
 #pragma once
 #include <QCoreApplication>
-
 #include <vector>
 
 #include "common/Types.h"
@@ -34,6 +33,8 @@ class GameServerHost : public QObject {
     void spawnAiPlayer(const QString& nick);
 
     GameState m_gameState;
+    std::vector<Position> m_spawns;
+    size_t m_nextSpawn = 0;
     std::unique_ptr<GameEngineDriver> m_engine;
     std::unique_ptr<ServerNetworkManager> m_networkManager;
     std::vector<AiPlayer> m_aiPlayers;

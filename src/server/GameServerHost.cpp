@@ -12,12 +12,13 @@ namespace DoomMan {
 void GameServerHost::start(int port) {
     srand(time(NULL));
 
-    auto loadedState = MapLoader::loadMap("assets/levels/level1.txt");
-    if (!loadedState) {
+    auto loadedLevel = MapLoader::loadMap("assets/levels/level1.txt");
+    if (!loadedLevel) {
         throw std::runtime_error("Couldn't load the map");
     }
 
-    m_gameState = *loadedState;
+    m_gameState = loadedLevel->state;
+    m_spawns = loadedLevel->spawns;
     m_engine = std::make_unique<GameEngineDriver>(m_gameState);
     m_networkManager = std::make_unique<ServerNetworkManager>(port);
 
@@ -48,33 +49,15 @@ void GameServerHost::handleJoinRequest(uint32_t playerId, const QString& nick) {
         }
     }
 
-    if (m_gameState.players.size() >= MAX_PLAYERS) {
-        qDebug() << "Lobby is full, rejecting: " << nick;
+    if (m_nextSpawn >= m_spawns.size()) {
+        qDebug() << "[GameServer] No free spawn points, rejecting: " << nick;
         return;
     }
 
-    bool slotFound = false;
-    for (auto& player : m_gameState.players) {
-        if (!player.name.isEmpty()) {
-            continue;
-        }
+    m_gameState.players.push_back(
+        PlayerState{.id = playerId, .pos = m_spawns[m_nextSpawn++], .name = nick});
 
-        player.id = playerId;
-        player.name = nick;
-        player.isAlive = true;
-        player.isReady = false;
-        slotFound = true;
-
-        qDebug() << "[GameServer] Player " << nick << " joined at slot with ID:" << playerId;
-        break;
-    }
-
-    if (!slotFound) {
-        qDebug() << "No empty spawn points for player: " << nick;
-        return;
-    }
-
-    m_gameState.players.push_back(DoomMan::PlayerState{});
+    qDebug() << "[GameServer] Player " << nick << " joined with ID:" << playerId;
 
     m_networkManager->broadcastState(m_gameState);
 }
