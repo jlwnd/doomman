@@ -6,6 +6,7 @@
 #include <compare>
 #include <cstdint>
 
+namespace DoomMan {
 /// Rozmiar planszy w kafelkach - plansza jest kwadratem o wymiarach BOARD_SIZE × BOARD_SIZE.
 inline constexpr int BOARD_SIZE = 21;
 
@@ -29,3 +30,4 @@ struct Position {
     /// Porównanie pozycji.
     auto operator<=>(const Position&) const = default;
 };
+}  // namespace DoomMan
