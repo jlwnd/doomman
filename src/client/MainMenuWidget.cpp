@@ -54,7 +54,6 @@ MainMenuWidget::MainMenuWidget(QWidget* parent) : QWidget(parent) {
 
     mainLayout->addWidget(container);
 
-    // @TODO: Change styling
     setStyleSheet(R"(
         #MenuContainer {
             background-color: #0b0c10;

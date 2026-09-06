@@ -20,8 +20,8 @@ static void test_picks_nearest() {
     GameState s = makeState({5, 5});
     s.board.set({5, 7}, TileType::Corridor);
     s.board.set({8, 5}, TileType::Corridor);
-    AiPlayer ai{1};
-    assert(ai.decideMove(s) == PlayerInput::MoveDown);
+    AiPlayer ai{1, 0};
+    assert(ai.decideMove(TICK_RATE_MS, s) == PlayerInput::MoveDown);
 }
 
 static void test_avoids_walls() {
@@ -29,29 +29,37 @@ static void test_avoids_walls() {
     s.board.set({6, 5}, TileType::Wall);
     s.board.set({7, 5}, TileType::Corridor);
     s.board.set({5, 7}, TileType::Corridor);
-    AiPlayer ai{1};
-    assert(ai.decideMove(s) == PlayerInput::MoveDown);
+    AiPlayer ai{1, 0};
+    assert(ai.decideMove(TICK_RATE_MS, s) == PlayerInput::MoveDown);
 }
 
 static void test_skips_current_tile() {
     GameState s = makeState({5, 5});
     s.board.set({5, 5}, TileType::Corridor);
     s.board.set({5, 7}, TileType::Corridor);
-    AiPlayer ai{1};
-    assert(ai.decideMove(s) == PlayerInput::MoveDown);
+    AiPlayer ai{1, 0};
+    assert(ai.decideMove(TICK_RATE_MS, s) == PlayerInput::MoveDown);
 }
 
 static void test_no_target_returns_none() {
     GameState s = makeState({5, 5});
-    AiPlayer ai{1};
-    assert(ai.decideMove(s) == PlayerInput::None);
+    AiPlayer ai{1, 0};
+    assert(ai.decideMove(TICK_RATE_MS, s) == PlayerInput::None);
 }
 
 static void test_dead_returns_none() {
     GameState s = makeState({5, 5}, /*alive=*/false);
     s.board.set({5, 7}, TileType::Corridor);
-    AiPlayer ai{1};
-    assert(ai.decideMove(s) == PlayerInput::None);
+    AiPlayer ai{1, 0};
+    assert(ai.decideMove(TICK_RATE_MS, s) == PlayerInput::None);
+}
+
+static void test_throttles_by_speed() {
+    GameState s = makeState({5, 5});
+    s.board.set({5, 7}, TileType::Corridor);
+    AiPlayer ai{1, 200};  // ruch co 200 ms
+    assert(ai.decideMove(100, s) == PlayerInput::None);      // 100 ms – za wcześnie
+    assert(ai.decideMove(100, s) == PlayerInput::MoveDown);  // 200 ms – ruch
 }
 
 int main() {
@@ -60,6 +68,7 @@ int main() {
     test_skips_current_tile();
     test_no_target_returns_none();
     test_dead_returns_none();
+    test_throttles_by_speed();
     std::puts("test_aiplayer: OK");
     return 0;
 }

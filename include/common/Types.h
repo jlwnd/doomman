@@ -14,6 +14,9 @@ namespace DoomMan {
 /// Maksymalna liczba graczy w jednej rozgrywce.
 inline constexpr int MAX_PLAYERS = 4;
 
+/// Długość jednego kroku symulacji w ms (wspólna baza czasu dla silnika i AI).
+inline constexpr int TICK_RATE_MS = 100;
+
 /// Liczba demonów obecnych na planszy.
 inline constexpr int DEMON_COUNT = 4;
 

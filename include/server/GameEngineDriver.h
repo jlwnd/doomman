@@ -36,6 +36,5 @@ class GameEngineDriver : public QObject {
    private:
     GameEngine m_engine;
     QTimer* m_timer;
-    const int TICK_RATE_MS = 100;
 };
 }  // namespace DoomMan

@@ -5,31 +5,29 @@
 
 namespace DoomMan {
 
-std::optional<GameState> MapLoader::loadMap(const std::string& filePath) {
+std::optional<LoadedLevel> MapLoader::loadMap(const std::string& filePath) {
     std::ifstream file(filePath);
     if (!file.is_open()) {
         std::cerr << "Couldn't open up the map: " << filePath << std::endl;
         return std::nullopt;
     }
 
-    GameState state;
+    LoadedLevel level;
     std::string line;
     int row = 0;
 
     while (std::getline(file, line) && row < BOARD_SIZE) {
         for (int col = 0; col < BOARD_SIZE && col < (int)line.length(); ++col) {
-            state.board.set({col, row}, charToTile(line[col]));
+            level.state.board.set({col, row}, charToTile(line[col]));
 
             if (line[col] == 'P') {
-                PlayerState player;
-                player.pos = {col, row};
-                state.players.push_back(player);
+                level.spawns.push_back({col, row});
             }
         }
         row++;
     }
 
-    return state;
+    return level;
 }
 
 TileType MapLoader::charToTile(char c) {

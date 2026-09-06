@@ -39,7 +39,7 @@ PlayerInput Navigation::getNextMoveAStar(
                                                 {current.pos.x + 1, current.pos.y}};
 
         for (const Position neighbour : possibleNeighbours) {
-            if (neighbour.x < 0 || neighbour.y >= BOARD_SIZE || neighbour.y < 0 ||
+            if (neighbour.x < 0 || neighbour.x >= BOARD_SIZE || neighbour.y < 0 ||
                 neighbour.y >= BOARD_SIZE)
                 continue;
             if (board[neighbour.y][neighbour.x] == TileType::Wall) continue;

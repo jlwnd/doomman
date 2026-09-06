@@ -52,7 +52,7 @@ class ServerNetworkManager : public QObject {
    private:
     QTcpServer* m_server;
     QMap<QTcpSocket*, uint32_t> m_clientToPlayerId;
-    uint32_t m_nextPlayerId = 0;
+    uint32_t m_nextPlayerId = 1;
 };
 
 }  // namespace DoomMan

@@ -9,7 +9,13 @@
 
 namespace DoomMan {
 
-PlayerInput AiPlayer::decideMove(const GameState& state) const {
+PlayerInput AiPlayer::decideMove(int deltaMs, const GameState& state) {
+    m_timeAccumulator += deltaMs;
+    if (m_timeAccumulator < m_moveIntervalMs) {
+        return PlayerInput::None;
+    }
+    m_timeAccumulator = 0;
+
     PlayerState aiPlayer = findPlayerWithId(state, m_playerId);
 
     if (!aiPlayer.id) {
