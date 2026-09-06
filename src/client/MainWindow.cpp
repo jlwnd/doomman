@@ -38,13 +38,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     connect(m_networkManager, &ClientNetworkManager::gameStateReceived, this,
             [this](const GameState& state) {
-        if (state.mode == GameMode::InGame) {
-            m_stackedWidget->setCurrentWidget(m_gameView);
-        }
-    });
+                if (state.mode == GameMode::InGame) {
+                    m_stackedWidget->setCurrentWidget(m_gameView);
+                }
+            });
 
     setWindowTitle("DoomMan");
-    resize(640, 640);
+    resize(672, 672);
 
     setStyleSheet("QMainWindow { background-color: #0b0c10; }");
 
