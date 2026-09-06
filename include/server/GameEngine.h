@@ -38,7 +38,6 @@ class GameEngine {
 
     int m_berserkTimerMs = 0;
     int m_msAccumulator = 0;
-    const int TICK_RATE_MS = 100;
 };
 
 }  // namespace DoomMan

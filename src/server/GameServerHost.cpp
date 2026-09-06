@@ -69,8 +69,8 @@ void GameServerHost::onEngineUpdate() {
         return;
     }
 
-    for (const AiPlayer& bot : m_aiPlayers) {
-        m_engine->processInput(bot.m_playerId, bot.decideMove(m_gameState));
+    for (AiPlayer& bot : m_aiPlayers) {
+        m_engine->processInput(bot.m_playerId, bot.decideMove(TICK_RATE_MS, m_gameState));
     }
 
     m_networkManager->broadcastState(m_gameState);
