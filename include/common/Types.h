@@ -20,6 +20,12 @@ inline constexpr int TICK_RATE_MS = 100;
 /// Liczba demonów obecnych na planszy.
 inline constexpr int DEMON_COUNT = 4;
 
+/// Punkty za zbieranie amunicji.
+constexpr uint32_t SCORE_PER_PELLET = 10;
+
+/// Punkty za zabicie demona.
+constexpr uint32_t SCORE_PER_DEMON = 200;
+
 /// Typ demona wyznaczający jego algorytm zachowania.
 enum class DemonType : uint8_t {
     Imp,        ///< Goni najbliższego gracza.

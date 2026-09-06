@@ -20,6 +20,7 @@ void GameEngine::step(int deltaMs) {
         m_berserkTimerMs -= deltaMs;
         if (m_berserkTimerMs <= 0) {
             m_berserkTimerMs = 0;
+            m_berserkChainCount = 0;
             for (auto& p : m_state.players) p.hasBerserk = false;
             for (auto& spawner : m_spawners) {
                 if (auto* demon = spawner.getDemon()) demon->setFrightened(false);
@@ -28,6 +29,28 @@ void GameEngine::step(int deltaMs) {
     }
 
     updateDemons();
+    checkDemonCollisions();
+}
+
+void GameEngine::checkDemonCollisions() {
+    for (size_t i = 0; i < m_spawners.size(); i++) {
+        auto* demon = m_spawners[i].getDemon();
+        if (!demon || !demon->isFrightened()) continue;
+
+        for (auto& player : m_state.players) {
+            if (player.isAlive && player.pos == demon->getPosition()) {
+                uint32_t reward = SCORE_PER_DEMON;
+                for (int j = 0; j < m_berserkChainCount; j++) {
+                    reward *= 2;
+                }
+                player.score += reward;
+                if (m_berserkChainCount < 3) m_berserkChainCount++;
+                m_spawners[i].notifyDemonDeath();
+                m_state.demons[i].isAlive = false;
+                break;
+            }
+        }
+    }
 }
 
 void GameEngine::processInput(uint32_t playerId, PlayerInput input) {
@@ -69,6 +92,7 @@ void GameEngine::movePlayer(PlayerState& player, int dx, int dy) {
             player.pos.x = newX;
             player.pos.y = newY;
             checkCollisions(player);
+            checkDemonCollisions();
         }
     }
 }
@@ -79,6 +103,7 @@ void GameEngine::checkCollisions(PlayerState& player) {
     if (tile == TileType::Berserk) {
         player.hasBerserk = true;
         m_berserkTimerMs = 10000;
+        m_berserkChainCount = 0;
         for (auto& spawner : m_spawners) {
             if (auto* demon = spawner.getDemon()) {
                 demon->setFrightened(true);
@@ -86,13 +111,12 @@ void GameEngine::checkCollisions(PlayerState& player) {
         }
         m_state.board.set(player.pos, TileType::Empty);
     } else if (tile == TileType::Corridor) {
-        player.score += 10;
+        player.score += SCORE_PER_PELLET;
         m_state.board.set(player.pos, TileType::Empty);
     }
 }
 
 void GameEngine::updateDemons() {
-    // Target the first living player (if any) for the demons to chase.
     const PlayerState* target = nullptr;
     for (const auto& p : m_state.players) {
         if (p.isAlive) {

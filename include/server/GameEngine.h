@@ -28,6 +28,7 @@ class GameEngine {
    private:
     void movePlayer(PlayerState& player, int dx, int dy);
     void checkCollisions(PlayerState& player);
+    void checkDemonCollisions();
 
     void initDemons();
     void updateDemons();
@@ -37,6 +38,7 @@ class GameEngine {
     std::vector<DemonSpawner> m_spawners;
 
     int m_berserkTimerMs = 0;
+    int m_berserkChainCount = 0;
     int m_msAccumulator = 0;
 };
 
