@@ -24,6 +24,7 @@ enum Tex {
 GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
     setAttribute(Qt::WA_OpaquePaintEvent);
     setFocusPolicy(Qt::StrongFocus);
+    setFixedSize(BOARD_SIZE * TILE_SIZE, BOARD_SIZE * TILE_SIZE);
 
     const char* names[] = {"wall",   "floor", "void",  "gate",      "ammo",    "berserk",
                            "player", "imp",   "pinky", "cacodemon", "lostsoul"};

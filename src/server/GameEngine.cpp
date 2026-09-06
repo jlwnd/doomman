@@ -5,6 +5,9 @@
 
 namespace DoomMan {
 
+constexpr uint32_t SCORE_PER_PELLET = 10;  ///< Punkty za zebranie amunicji.
+constexpr uint32_t SCORE_PER_DEMON = 200;  ///< Punkty za zabicie przerażonego demona.
+
 GameEngine::GameEngine(GameState& state) : m_state(state) {
     initDemons();
 }
@@ -28,6 +31,23 @@ void GameEngine::step(int deltaMs) {
     }
 
     updateDemons();
+    checkDemonCollisions();
+}
+
+void GameEngine::checkDemonCollisions() {
+    for (size_t i = 0; i < m_spawners.size(); i++) {
+        auto* demon = m_spawners[i].getDemon();
+        if (!demon || !demon->isFrightened()) continue;
+
+        for (auto& player : m_state.players) {
+            if (player.isAlive && player.pos == demon->getPosition()) {
+                player.score += SCORE_PER_DEMON;
+                m_spawners[i].notifyDemonDeath();
+                m_state.demons[i].isAlive = false;
+                break;
+            }
+        }
+    }
 }
 
 void GameEngine::processInput(uint32_t playerId, PlayerInput input) {
@@ -69,6 +89,7 @@ void GameEngine::movePlayer(PlayerState& player, int dx, int dy) {
             player.pos.x = newX;
             player.pos.y = newY;
             checkCollisions(player);
+            checkDemonCollisions();
         }
     }
 }
@@ -86,7 +107,7 @@ void GameEngine::checkCollisions(PlayerState& player) {
         }
         m_state.board.set(player.pos, TileType::Empty);
     } else if (tile == TileType::Corridor) {
-        player.score += 10;
+        player.score += SCORE_PER_PELLET;
         m_state.board.set(player.pos, TileType::Empty);
     }
 }

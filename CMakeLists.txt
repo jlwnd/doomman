@@ -63,3 +63,18 @@ add_executable(test_aiplayer
 )
 target_link_libraries(test_aiplayer PRIVATE Qt6::Core)
 add_test(NAME test_aiplayer COMMAND test_aiplayer)
+
+add_executable(test_scoring
+    tests/test_scoring.cpp
+    src/server/GameEngine.cpp
+    src/server/Map.cpp
+    src/server/Navigation.cpp
+    src/server/demons/DemonBase.cpp
+    src/server/demons/DemonSpawner.cpp
+    src/server/demons/Imp.cpp
+    src/server/demons/Pinky.cpp
+    src/server/demons/Cacodemon.cpp
+    src/server/demons/LostSoul.cpp
+)
+target_link_libraries(test_scoring PRIVATE Qt6::Core)
+add_test(NAME test_scoring COMMAND test_scoring)

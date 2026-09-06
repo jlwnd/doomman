@@ -28,6 +28,7 @@ class GameEngine {
    private:
     void movePlayer(PlayerState& player, int dx, int dy);
     void checkCollisions(PlayerState& player);
+    void checkDemonCollisions();
 
     void initDemons();
     void updateDemons();

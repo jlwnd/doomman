@@ -9,6 +9,8 @@ namespace DoomMan {
 PlayerInput Navigation::getNextMoveAStar(
     const Position& start, const Position& target,
     const std::array<std::array<TileType, BOARD_SIZE>, BOARD_SIZE>& board) {
+    if (start == target) return PlayerInput::None;
+
     std::priority_queue<Node, std::vector<Node>, std::greater<Node>> openSet;
     std::map<Position, int> gScore;
     std::map<Position, Position> cameFrom;

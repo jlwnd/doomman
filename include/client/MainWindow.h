@@ -1,4 +1,5 @@
 #pragma once
+#include <QLabel>
 #include <QMainWindow>
 #include <QStackedWidget>
 
@@ -27,7 +28,10 @@ class MainWindow : public QMainWindow {
     QStackedWidget* m_stackedWidget;
     MainMenuWidget* m_mainMenu;
     GameWidget* m_gameView;
+    QWidget* m_gamePage;
+    QLabel* m_scoreLabel;
     LobbyWidget* m_lobbyView;
+    QString m_nick;
 
     ClientNetworkManager* m_networkManager;
     std::unique_ptr<GameServerHost> m_localServer;
