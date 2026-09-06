@@ -10,16 +10,10 @@ configure:
 build: configure generate-docs
 	cmake --build $(BUILD) -j
 
-server: configure
-	cmake --build $(BUILD) -j --target DoomManServer
-
 client: configure
 	cmake --build $(BUILD) -j --target DoomManClient
 
-run-server: server
-	$(BUILD)/DoomManServer
-
-run-client: client
+run: client
 	$(BUILD)/DoomManClient
 
 fmt:
