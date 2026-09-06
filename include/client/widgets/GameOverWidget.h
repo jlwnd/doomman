@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-#include "common/Types.h"
+#include "client/Leaderboard.h"
 
 class QListWidget;
 
@@ -16,9 +16,9 @@ class GameOverWidget : public QWidget {
     /// @param parent Widżet-rodzic Qt.
     explicit GameOverWidget(QWidget* parent = nullptr);
 
-    /// Wypełnia tablicę wyników graczami posortowanymi malejąco po punktach.
-    /// @param state Stan gry z ostatniej klatki.
-    void showScores(const GameState& state);
+    /// Wypełnia tablicę wyników gotowym rankingiem graczy.
+    /// @param board Ranking zbudowany po stronie modelu klienta.
+    void showScores(const Leaderboard& board);
 
    signals:
     // Emitowany gdy gracz kliknie przycisk wyjścia.

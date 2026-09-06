@@ -1,7 +1,5 @@
 #include "client/widgets/GameOverWidget.h"
 
-#include <algorithm>
-
 #include <QFrame>
 #include <QLabel>
 #include <QListWidget>
@@ -43,15 +41,10 @@ GameOverWidget::GameOverWidget(QWidget* parent) : QWidget(parent) {
     connect(exitButton, &QPushButton::clicked, this, &GameOverWidget::sigExit);
 }
 
-void GameOverWidget::showScores(const GameState& state) {
-    std::vector<PlayerState> ranked(state.players.begin(), state.players.end());
-    std::sort(ranked.begin(), ranked.end(),
-              [](const PlayerState& a, const PlayerState& b) { return a.score > b.score; });
-
+void GameOverWidget::showScores(const Leaderboard& board) {
     m_scoreList->clear();
-    int place = 1;
-    for (const auto& player : ranked) {
-        m_scoreList->addItem(QString("%1. %2 - %3").arg(place++).arg(player.name).arg(player.score));
+    for (const auto& e : board.entries()) {
+        m_scoreList->addItem(QString("%1. %2 - %3").arg(e.place).arg(e.name).arg(e.score));
     }
 }
 }  // namespace DoomMan
