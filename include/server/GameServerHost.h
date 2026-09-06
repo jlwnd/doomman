@@ -24,6 +24,13 @@ class GameServerHost : public QObject {
     /// @param nick Pseudonim gracza.
     void handleJoinRequest(uint32_t playerId, const QString& nick);
 
+    /// Przełącza gotowość gracza w lobby i rozsyła nowy stan.
+    /// @param playerId Identyfikator gracza.
+    void handlePlayerReady(uint32_t playerId);
+
+    /// Rozpoczyna rundę (ustawia tryb InGame) i rozsyła nowy stan.
+    void handleGameStart();
+
    private slots:
     void onEngineUpdate();
 

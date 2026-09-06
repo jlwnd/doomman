@@ -1,4 +1,4 @@
-#include "client/MainMenuWidget.h"
+#include "client/widgets/MainMenuWidget.h"
 
 #include <QFrame>
 #include <QHBoxLayout>

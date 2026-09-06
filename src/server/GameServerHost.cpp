@@ -28,17 +28,22 @@ void GameServerHost::start(int port) {
     QObject::connect(m_networkManager.get(), &ServerNetworkManager::joinRequested, this,
                      &GameServerHost::handleJoinRequest);
 
+    QObject::connect(m_networkManager.get(), &ServerNetworkManager::readyToggled, this,
+                     &GameServerHost::handlePlayerReady);
+
+    QObject::connect(m_networkManager.get(), &ServerNetworkManager::startRequested, this,
+                     &GameServerHost::handleGameStart);
+
     QObject::connect(m_engine.get(), &GameEngineDriver::gameStateUpdated, this,
                      &GameServerHost::onEngineUpdate);
 
     spawnAiPlayer("BOT");  // @Todo: remove the bot
-
-    m_engine->start();
 }
 
 void GameServerHost::spawnAiPlayer(const QString& nick) {
     uint32_t botId = m_networkManager->allocatePlayerId();
     handleJoinRequest(botId, nick);
+    handlePlayerReady(botId);
     m_aiPlayers.push_back(AiPlayer{botId});
 }
 
@@ -59,6 +64,24 @@ void GameServerHost::handleJoinRequest(uint32_t playerId, const QString& nick) {
 
     qDebug() << "[GameServer] Player " << nick << " joined with ID:" << playerId;
 
+    m_networkManager->broadcastState(m_gameState);
+}
+
+void GameServerHost::handlePlayerReady(uint32_t playerId) {
+    for (auto& player : m_gameState.players) {
+        if (player.id == playerId) {
+            player.isReady = !player.isReady;
+            break;
+        }
+    }
+    m_networkManager->broadcastState(m_gameState);
+}
+
+void GameServerHost::handleGameStart() {
+    if (m_gameState.mode == GameMode::InGame) return;
+
+    m_gameState.mode = GameMode::InGame;
+    m_engine->start();
     m_networkManager->broadcastState(m_gameState);
 }
 

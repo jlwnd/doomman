@@ -44,6 +44,13 @@ class ServerNetworkManager : public QObject {
     /// @param nick Pseudonim gracza.
     void joinRequested(uint32_t playerId, const QString& nick);
 
+    /// Emitowany po zgłoszeniu gotowości przez gracza (przełącza stan).
+    /// @param playerId Identyfikator gracza.
+    void readyToggled(uint32_t playerId);
+
+    /// Emitowany po żądaniu rozpoczęcia rundy przez hosta.
+    void startRequested();
+
    private slots:
     void onNewConnection();
     void onClientDisconnected();

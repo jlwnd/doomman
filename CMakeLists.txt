@@ -13,9 +13,10 @@ include_directories(include)
 add_executable(DoomManClient
     src/GameClient.cpp
     src/client/NetworkManager.cpp
-    src/client/GameWidget.cpp
     src/client/MainWindow.cpp
-    src/client/MainMenuWidget.cpp
+    src/client/widgets/GameWidget.cpp
+    src/client/widgets/MainMenuWidget.cpp
+    src/client/widgets/LobbyWidget.cpp
     src/server/GameServerHost.cpp
     src/server/GameEngineDriver.cpp
     src/server/GameEngine.cpp
@@ -32,9 +33,10 @@ add_executable(DoomManClient
     src/server/demons/DemonSpawner.cpp
 
     include/client/NetworkManager.h
-    include/client/GameWidget.h
     include/client/MainWindow.h
-    include/client/MainMenuWidget.h
+    include/client/widgets/GameWidget.h
+    include/client/widgets/MainMenuWidget.h
+    include/client/widgets/LobbyWidget.h
     include/server/GameServerHost.h
     include/server/GameEngine.h
     include/server/GameEngineDriver.h

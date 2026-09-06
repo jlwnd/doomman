@@ -57,4 +57,26 @@ void ClientNetworkManager::sendInput(PlayerInput input) {
     m_socket->write(block);
 }
 
+void ClientNetworkManager::sendReady() {
+    if (m_socket->state() != QAbstractSocket::ConnectedState) return;
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_0);
+
+    out << PacketType::PlayerReady;
+    m_socket->write(block);
+}
+
+void ClientNetworkManager::sendStart() {
+    if (m_socket->state() != QAbstractSocket::ConnectedState) return;
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_0);
+
+    out << PacketType::GameStart;
+    m_socket->write(block);
+}
+
 }  // namespace DoomMan

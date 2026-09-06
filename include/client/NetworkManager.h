@@ -24,6 +24,12 @@ class ClientNetworkManager : public QObject {
     /// @param input Wciśnięty kierunek ruchu.
     void sendInput(PlayerInput input);
 
+    /// Zgłasza serwerowi gotowość gracza w lobby.
+    void sendReady();
+
+    /// Zgłasza serwerowi rozpoczęcie rundy (tylko host).
+    void sendStart();
+
    signals:
     /// Emitowany po odebraniu i zdeserializowaniu stanu gry z serwera.
     /// @param state Odebrany stan gry.
