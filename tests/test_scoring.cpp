@@ -62,11 +62,23 @@ static void test_no_kill_without_berserk() {
     assert(s.demons[0].isAlive);
 }
 
+static void test_demon_kills_player() {
+    GameState s = makeState({5, 4});
+    s.board.set({5, 5}, TileType::ImpSpawn);
+    GameEngine engine{s};
+
+    assert(s.players[0].isAlive);
+    engine.processInput(1, PlayerInput::MoveDown);
+    assert(!s.players[0].isAlive);
+    assert(s.demons[0].isAlive);
+}
+
 int main() {
     test_pellet_scores();
     test_demon_kill_scores();
     test_escalating_berserk_scores();
     test_no_kill_without_berserk();
+    test_demon_kills_player();
     std::puts("all scoring tests passed");
     return 0;
 }

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_mainMenu = new MainMenuWidget(this);
     m_gameView = new GameWidget(this);
     m_lobbyView = new LobbyWidget(this);
+    m_gameOverView = new GameOverWidget(this);
     m_networkManager = new ClientNetworkManager(this);
 
     m_gamePage = new QWidget(this);
@@ -30,6 +31,9 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_stackedWidget->addWidget(m_mainMenu);
     m_stackedWidget->addWidget(m_gamePage);
     m_stackedWidget->addWidget(m_lobbyView);
+    m_stackedWidget->addWidget(m_gameOverView);
+
+    connect(m_gameOverView, &GameOverWidget::sigExit, this, &MainWindow::handleExit);
 
     connect(m_mainMenu, &MainMenuWidget::sigHostGame, this, &MainWindow::handleHostGame);
     connect(m_mainMenu, &MainMenuWidget::sigJoinGame, this, &MainWindow::handleJoinGame);
@@ -88,9 +92,16 @@ void MainWindow::handleGameState(const GameState& state) {
     for (const auto& p : state.players) {
         if (p.name == m_nick) {
             m_scoreLabel->setText(QString("Score: %1").arg(p.score));
+            if (!p.isAlive && !m_gameOverShown) {
+                m_gameOverShown = true;
+                m_gameOverView->showScores(state);
+                m_stackedWidget->setCurrentWidget(m_gameOverView);
+            }
             break;
         }
     }
+    if (m_gameOverShown) return;
+
     if (state.mode == GameMode::InGame) {
         m_stackedWidget->setCurrentWidget(m_gamePage);
     }

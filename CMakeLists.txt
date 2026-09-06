@@ -17,6 +17,7 @@ add_executable(DoomManClient
     src/client/widgets/GameWidget.cpp
     src/client/widgets/MainMenuWidget.cpp
     src/client/widgets/LobbyWidget.cpp
+    src/client/widgets/GameOverWidget.cpp
     src/server/GameServerHost.cpp
     src/server/GameEngineDriver.cpp
     src/server/GameEngine.cpp
@@ -37,6 +38,7 @@ add_executable(DoomManClient
     include/client/widgets/GameWidget.h
     include/client/widgets/MainMenuWidget.h
     include/client/widgets/LobbyWidget.h
+    include/client/widgets/GameOverWidget.h
     include/server/GameServerHost.h
     include/server/GameEngine.h
     include/server/GameEngineDriver.h
