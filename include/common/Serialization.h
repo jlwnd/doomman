@@ -1,42 +1,53 @@
 #pragma once
 
+/// @file
+/// @brief Operatory serializacji typów gry do/z QDataStream.
+
 #include <QDataStream>
 
 #include "common/Types.h"
 
-namespace Doom {
+namespace DoomMan {
 // Position
+/// Serializuje Position do strumienia QDataStream.
 inline QDataStream& operator<<(QDataStream& out, const Position& p) {
     return out << p.x << p.y;
 }
+
+/// Odczytuje Position ze strumienia QDataStream.
 inline QDataStream& operator>>(QDataStream& in, Position& p) {
     return in >> p.x >> p.y;
 }
 
 // PlayerState
+/// Serializuje PlayerState do strumienia QDataStream.
 inline QDataStream& operator<<(QDataStream& out, const PlayerState& p) {
-    return out << p.id << p.pos << p.score << p.isAlive << p.hasBerserk;
+    return out << p.id << p.pos << p.name << p.score << p.isReady << p.isAlive << p.hasBerserk;
 }
+/// Odczytuje PlayerState ze strumienia QDataStream.
 inline QDataStream& operator>>(QDataStream& in, PlayerState& p) {
-    return in >> p.id >> p.pos >> p.score >> p.isAlive >> p.hasBerserk;
+    return in >> p.id >> p.pos >> p.name >> p.score >> p.isReady >> p.isAlive >> p.hasBerserk;
 }
 
 // DemonState
+/// Serializuje DemonState do strumienia QDataStream.
 inline QDataStream& operator<<(QDataStream& out, const DemonState& d) {
-    return out << static_cast<uint8_t>(d.type) << d.pos << d.isFrightened;
+    return out << static_cast<uint8_t>(d.type) << d.pos << d.isFrightened << d.isAlive;
 }
+/// Odczytuje DemonState ze strumienia QDataStream.
 inline QDataStream& operator>>(QDataStream& in, DemonState& d) {
     uint8_t type;
-    in >> type >> d.pos >> d.isFrightened;
+    in >> type >> d.pos >> d.isFrightened >> d.isAlive;
     d.type = static_cast<DemonType>(type);
     return in;
 }
 
 // GameState
+/// Serializuje pełny GameState (tryb, plansza, gracze, demony, czas) do strumienia.
 inline QDataStream& operator<<(QDataStream& out, const GameState& g) {
     out << static_cast<uint8_t>(g.mode);
 
-    for (const auto& row : g.board) {
+    for (const auto& row : g.board.tiles()) {
         for (const auto& tile : row) {
             out << static_cast<uint8_t>(tile);
         }
@@ -55,16 +66,17 @@ inline QDataStream& operator<<(QDataStream& out, const GameState& g) {
     return out;
 }
 
+/// Odczytuje pełny GameState (tryb, plansza, gracze, demony, czas) ze strumienia.
 inline QDataStream& operator>>(QDataStream& in, GameState& g) {
     uint8_t mode;
     in >> mode;
     g.mode = static_cast<GameMode>(mode);
 
-    for (auto& row : g.board) {
-        for (auto& tile : row) {
+    for (int y = 0; y < BOARD_SIZE; ++y) {
+        for (int x = 0; x < BOARD_SIZE; ++x) {
             uint8_t t;
             in >> t;
-            tile = static_cast<TileType>(t);
+            g.board.set({x, y}, static_cast<TileType>(t));
         }
     }
 
@@ -86,10 +98,12 @@ inline QDataStream& operator>>(QDataStream& in, GameState& g) {
 }
 
 // PlayerInput
+/// Serializuje PlayerInput do strumienia QDataStream.
 inline QDataStream& operator<<(QDataStream& out, const PlayerInput& input) {
     return out << static_cast<uint8_t>(input);
 }
 
+/// Odczytuje PlayerInput ze strumienia QDataStream.
 inline QDataStream& operator>>(QDataStream& in, PlayerInput& input) {
     uint8_t val;
     in >> val;
@@ -97,4 +111,4 @@ inline QDataStream& operator>>(QDataStream& in, PlayerInput& input) {
     return in;
 }
 
-}  // namespace Doom
+}  // namespace DoomMan

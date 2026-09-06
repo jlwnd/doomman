@@ -1,27 +1,25 @@
 #include <QApplication>
-#include <QDebug>
+#include <QFile>
+#include <QFont>
+#include <QFontDatabase>
 
-#include "client/GameWidget.h"
-#include "client/NetworkManager.h"
+#include "client/MainWindow.h"
+#include "client/Theme.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
 
-    Doom::GameWidget gameView;
-    Doom::ClientNetworkManager network;
+    QString family = QStringLiteral("monospace");
+    QFile fontFile(QStringLiteral("assets/fonts/PressStart2P-Regular.ttf"));
+    if (fontFile.open(QIODevice::ReadOnly)) {
+        const int fontId = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
+        family = QFontDatabase::applicationFontFamilies(fontId).value(0, family);
+    }
+    a.setFont(QFont(family));
+    a.setStyleSheet(DoomMan::appStyleSheet(family));
 
-    QObject::connect(&network, &Doom::ClientNetworkManager::gameStateReceived, &gameView,
-                     &Doom::GameWidget::updateState);
-
-    QObject::connect(&gameView, &Doom::GameWidget::inputDetected, &network,
-                     &Doom::ClientNetworkManager::sendInput);
-
-    gameView.setWindowTitle("DoomMan Client");
-    gameView.resize(640, 640);
-    gameView.show();
-
-    qDebug() << "Connecting to server...";
-    network.connectToServer("127.0.0.1", 666);
+    DoomMan::MainWindow window;
+    window.show();
 
     return a.exec();
 }

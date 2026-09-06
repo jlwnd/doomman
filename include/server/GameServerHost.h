@@ -1,0 +1,53 @@
+#pragma once
+#include <QCoreApplication>
+#include <vector>
+
+#include "common/Types.h"
+#include "server/AiPlayer.h"
+#include "server/GameEngineDriver.h"
+#include "server/ServerNetworkManager.h"
+
+namespace DoomMan {
+
+/// Host serwera – spina silnik gry z warstwą sieciową w jedną całość.
+class GameServerHost : public QObject {
+   public:
+    /// Uruchamia serwer nasłuchujący na zadanym porcie.
+    /// @param port Port TCP nasłuchu.
+    void start(int port);
+
+    /// Zatrzymuje serwer i kończy rozgrywkę.
+    void stop();
+
+    /// Obsługuje prośbę gracza o dołączenie do gry.
+    /// @param playerId Identyfikator gracza.
+    /// @param nick Pseudonim gracza.
+    void handleJoinRequest(uint32_t playerId, const QString& nick);
+
+    /// Przełącza gotowość gracza w lobby i rozsyła nowy stan.
+    /// @param playerId Identyfikator gracza.
+    void handlePlayerReady(uint32_t playerId);
+
+    /// Rozpoczyna rundę (ustawia tryb InGame) i rozsyła nowy stan.
+    void handleGameStart();
+
+    /// Dodaje do lobby gracza sterowanego przez AI na żądanie hosta.
+    void handleAddBot();
+
+   private slots:
+    void onEngineUpdate();
+
+   private:
+    /// Dodaje gracza sterowanego przez AI (dołącza jak zwykły gracz).
+    /// @param nick Pseudonim bota.
+    void spawnAiPlayer(const QString& nick);
+
+    GameState m_gameState;
+    std::vector<Position> m_spawns;
+    size_t m_nextSpawn = 0;
+    std::unique_ptr<GameEngineDriver> m_engine;
+    std::unique_ptr<ServerNetworkManager> m_networkManager;
+    std::vector<AiPlayer> m_aiPlayers;
+};
+
+}  // namespace DoomMan

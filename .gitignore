@@ -1,2 +1,5 @@
 .vscode
 build/
+.cache
+docs/doxygen/
+.DS_Store
