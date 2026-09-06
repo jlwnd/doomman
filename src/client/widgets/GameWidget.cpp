@@ -70,10 +70,13 @@ void GameWidget::paintEvent(QPaintEvent* event) {
     }
 
     for (const auto& player : m_currentState.players) {
+        if (!player.isAlive) continue;
         drawTexture(painter, m_tex[TEX_PLAYER], player.pos.x, player.pos.y);
     }
 
     for (const auto& demon : m_currentState.demons) {
+        if (!demon.isAlive) continue;
+
         int tex = TEX_IMP;
         switch (demon.type) {
             case DemonType::Imp:

@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 
 #include "client/NetworkManager.h"
+#include "client/widgets/GameOverWidget.h"
 #include "client/widgets/GameWidget.h"
 #include "client/widgets/LobbyWidget.h"
 #include "client/widgets/MainMenuWidget.h"
@@ -32,7 +33,9 @@ class MainWindow : public QMainWindow {
     QWidget* m_gamePage;
     QLabel* m_scoreLabel;
     LobbyWidget* m_lobbyView;
+    GameOverWidget* m_gameOverView;
     QString m_nick;
+    bool m_gameOverShown = false;
 
     ClientNetworkManager* m_networkManager;
     std::unique_ptr<GameServerHost> m_localServer;

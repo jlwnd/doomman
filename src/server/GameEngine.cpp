@@ -35,10 +35,12 @@ void GameEngine::step(int deltaMs) {
 void GameEngine::checkDemonCollisions() {
     for (size_t i = 0; i < m_spawners.size(); i++) {
         auto* demon = m_spawners[i].getDemon();
-        if (!demon || !demon->isFrightened()) continue;
+        if (!demon) continue;
 
         for (auto& player : m_state.players) {
-            if (player.isAlive && player.pos == demon->getPosition()) {
+            if (!player.isAlive || player.pos != demon->getPosition()) continue;
+
+            if (demon->isFrightened()) {
                 uint32_t reward = SCORE_PER_DEMON;
                 for (int j = 0; j < m_berserkChainCount; j++) {
                     reward *= 2;
@@ -49,6 +51,8 @@ void GameEngine::checkDemonCollisions() {
                 m_state.demons[i].isAlive = false;
                 break;
             }
+
+            player.isAlive = false;
         }
     }
 }
